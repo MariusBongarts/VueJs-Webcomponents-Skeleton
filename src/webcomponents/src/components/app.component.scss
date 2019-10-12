@@ -1,0 +1,23 @@
+:host {
+    z-index: 9999 !important;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 100px;
+
+    h1 {
+        width: 100%;
+        text-align: center;
+    }
+
+    .component {
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+    }
+
+}
