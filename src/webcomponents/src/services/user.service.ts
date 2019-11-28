@@ -23,6 +23,23 @@ export class UserService {
     return jwtToken.token;
   }
 
+    /**
+   * Signs up the user. A jwt token will be the result so that the user gets logged in directly
+   *
+   * @returns {Promise<string>}
+   * @memberof UserService
+   */
+  async register(loginUserDto: LoginUserDto): Promise<string> {
+    const token = await this.httpClient.post('/users/register', loginUserDto);
+    const jwtToken = await token.json();
+    this.jwtService.setJwt(jwtToken.token);
+    return jwtToken.token;
+  }
+
+  async resendEmailConfirmationLink(email: string) {
+    await this.httpClient.post(`/users/resend-email-confirmation?email=${email}`, {});
+  }
+
   async logout() {
     this.jwtService.setJwt('');
   }

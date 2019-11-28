@@ -46,8 +46,6 @@
 
 /* 0 */
 
-/* 1 */
-
 /***/
 
 /*
@@ -70,6 +68,8 @@
 // when a module is imported multiple times with different media queries.
 
 // I hope this will never occur (Hey this way we have smaller bundles)
+
+/* 1 */
 
 /* 2 */
 
@@ -121,6 +121,14 @@
 /* 15 */
 
 /* 16 */
+
+/* 17 */
+
+/* 18 */
+
+/* 19 */
+
+/* 20 */
 
 // EXTERNAL MODULE: ./src/index.scss
 
@@ -1233,6 +1241,17 @@
      * @memberof UserService
      */
 
+/**
+   * Signs up the user. A jwt token will be the result so that the user gets logged in directly
+   *
+   * @returns {Promise<string>}
+   * @memberof UserService
+   */
+
+// CONCATENATED MODULE: ./src/components/lobby-container/sign-up/sign-up.component.ts
+
+// CONCATENATED MODULE: ./src/components/lobby-container/sign-in/sign-in.component.ts
+
 // CONCATENATED MODULE: ./src/components/lobby-container/lobby-container.component.ts
 
 /**
@@ -1256,5 +1275,3 @@
      * @class LobbyContainer
      * @extends {LitElement}
      */
-
-//

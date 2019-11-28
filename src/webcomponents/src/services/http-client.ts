@@ -45,6 +45,8 @@ export class HttpClient {
     if (response.ok) {
       return response;
     } else {
+      if (response.status === 401) return await Promise.reject(await response.json());
+      if (response.status === 400) return await Promise.reject(await response.json());
       let message = await response.text();
       try {
         message = JSON.parse(message).message;

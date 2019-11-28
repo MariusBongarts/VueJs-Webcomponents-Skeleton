@@ -6,8 +6,8 @@ export class SocketService {
   socket!: SocketIOClient.Socket;
 
   constructor() {
-    this.initSocket();
-    this.handleSockets();
+    // this.initSocket();
+    // this.handleSockets();
   }
 
   initSocket() {

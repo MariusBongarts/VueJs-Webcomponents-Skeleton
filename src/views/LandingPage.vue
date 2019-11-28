@@ -1,5 +1,6 @@
 <template>
   <div class="landing-page">
+    <LandingHeader></LandingHeader>
     <Particles v-if="true"></Particles>
     <router-view />
   </div>
@@ -10,12 +11,14 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import Particles from './../components/Particles.vue';
 import LandingPageInfo from './../components/LandingPageInfo.vue';
 import LoginContainer from './../components/LoginContainer.vue';
+import LandingHeader from './../components/LandingHeader.vue';
 
 @Component({
   components: {
     Particles,
     LandingPageInfo,
     LoginContainer,
+    LandingHeader
   },
 })
 export default class Home extends Vue {

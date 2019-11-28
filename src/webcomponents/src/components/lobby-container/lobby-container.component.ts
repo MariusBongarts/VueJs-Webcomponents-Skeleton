@@ -1,6 +1,10 @@
-import { LoginUserDto } from './../../models/loginUserDto';
+import { UserService } from './../../services/user.service';
+import { JwtService } from '../../services/jwt.service';
+import { JwtPayload } from '../../models/jwtPayload';
+import { LoginUserDto } from '../../models/loginUserDto';
 import { css, customElement, html, LitElement, query, property, unsafeCSS } from 'lit-element';
-import { UserService } from '../../services/user.service';
+import './sign-up/sign-up.component.ts';
+import './sign-in/sign-in.component.ts';
 
 const componentCSS = require('./lobby-container.component.scss');
 
@@ -18,11 +22,11 @@ const componentCSS = require('./lobby-container.component.scss');
 @customElement('lobby-container')
 class LobbyContainer extends LitElement {
 	static styles = css`${unsafeCSS(componentCSS)}`;
+	userService = new UserService('https://marius96.uber.space/');
+	jwtService = new JwtService();
 
 	@property()
-	url = 'http://localhost:3000';
-
-	userService!: UserService;
+	activeTab: 'signIn' | 'signUp' = 'signIn';
 
 	@property()
 	formSuccess = false;
@@ -39,66 +43,65 @@ class LobbyContainer extends LitElement {
 	@query('#password')
 	passwordElement!: HTMLInputElement;
 
-	firstUpdated() {
-		this.userService = new UserService(this.url);
-		console.log("LobbyContainer");
-		console.log(this.url);
+	@property()
+	loggedUser: JwtPayload;
+
+	async firstUpdated() {
+		await this.loadUserData();
 	}
 
-	async submit(e?: MouseEvent) {
-		e ? e.preventDefault() : '';
-		let jwtToken = '';
-		if (this.isFormValid()) {
-			const signInData: LoginUserDto = {
-				email: this.emailElement.value,
-				password: this.passwordElement.value
-			};
-			try {
-				this.loading = true;
-				jwtToken = await this.userService.login(signInData);
-			} catch (error) {
-				//
-			}
-			jwtToken ? this.formSuccess = true : '';
-			this.loading = false;
-		} else {
-			this.form.classList.add('was-validated');
-		}
-		if (jwtToken) {
-			setTimeout(() => this.emitLogin(jwtToken), 1000);
+	async loadUserData() {
+		try {
+			this.loggedUser = await this.jwtService.getJwtPayload();
+			if (!this.loggedUser) this.logout();
+		} catch (error) {
+			this.logout();
 		}
 	}
 
-	emitLogin(jwtToken: string) {
-		this.dispatchEvent(
-			new CustomEvent('login', {
-				detail: jwtToken,
-				bubbles: true
-			})
-		);
+	async loggedIn() {
+		this.formSuccess = true;
+		setTimeout(async () => {
+			this.loggedUser = await this.jwtService.getJwtPayload();
+			this.emitLogin();
+		}, 500);
+
 	}
 
-	isFormValid() {
-		return this.form.checkValidity();
+	emitLogin() {
+		this.dispatchEvent(new CustomEvent('loggedIn', {
+			bubbles: true,
+		}));
 	}
+
+	async logout() {
+		this.loggedUser = undefined;
+		this.formSuccess = false;
+		await this.userService.logout();
+	}
+
 
 	render() {
 		return html`
-	<div class="container ${this.formSuccess ? 'form-success' : ''}">
-		<h1>Welcome</h1>
-		${!this.formSuccess ? html`
-		<form class="form">
-			<input type="email" required id="email" name="email" placeholder="Email">
-			<input type="password" required id="password" name="password" placeholder="Password">
-			<button
-			id="login-button" @click=${(e: MouseEvent) => this.submit(e)}
-			class="${this.loading ? 'loading' :
+		<bubbles-animation>
+			<div class="container ${this.formSuccess ? 'form-success' : ''}">
+			<div class="tabs">
+			<button @click=${() => this.activeTab = 'signIn'} class="${this.activeTab === 'signIn' ? 'active' : ''}">Sign in</button>
+			<button @click=${() => this.activeTab = 'signUp'} class="${this.activeTab === 'signUp' ? 'active' : ''}">Sign up</button>
+			</div>
+			<h1>Welcome</h1>
+			${!this.formSuccess ? html`
+			${this.activeTab === 'signIn' ? html`
+					<!-- Sign in View -->
+					<sign-in @loggedIn=${async () => await this.loggedIn()}></sign-in>
+` : html`
+<!-- Sign Up view -->
+<sign-up @registered=${async () => await this.loggedIn()}></sign-up>
 
-					''}"
-			>${this.loading ? '...' : 'Login'}</button>
-		</form>
-		` : ''}
-	</div>
+`}
+				` : ''}
+			</div>
+		</bubbles-animation>
   `
 	}
 }
