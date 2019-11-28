@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class LandingHeader extends Vue {
@@ -21,7 +21,7 @@ export default class LandingHeader extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-@import "./../variables.scss";
+@import './../variables.scss';
 
 .header-container {
   z-index: 9999;

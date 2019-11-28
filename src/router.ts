@@ -2,6 +2,11 @@ import { AuthStore } from './store/auth-store';
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import Marks from './views/Marks.vue';
+import Bookmarks from './views/Bookmarks.vue';
+import Settings from './views/Settings.vue';
+import Account from './views/Account.vue';
+import Tags from './views/Tags.vue';
 import LandingPage from './views/LandingPage.vue';
 import LandingPageInfo from './components/LandingPageInfo.vue';
 import LoginContainer from './components/LoginContainer.vue';
@@ -25,6 +30,31 @@ const router = new Router({
       component: Home,
     },
     {
+      path: '/marks',
+      name: 'marks',
+      component: Marks,
+    },
+    {
+      path: '/bookmarks',
+      name: 'bookmarks',
+      component: Bookmarks,
+    },
+    {
+      path: '/tags',
+      name: 'tags',
+      component: Tags,
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: Settings,
+    },
+    {
+      path: '/account',
+      name: 'account',
+      component: Account,
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
@@ -43,7 +73,7 @@ router.beforeEach((to, from, next) => {
     if ((to.path === '/' || to.path === '/login') && AuthStore.state.jwt) next('/home');
 
     // If user is not loggedIn
-    if ((to.path === '/' || to.path === '/login')  && !AuthStore.state.jwt) next();
+    if ((to.path === '/' || to.path === '/login') && !AuthStore.state.jwt) next();
 
     // If logged In
     else AuthStore.state.jwt ? next() : next('/');

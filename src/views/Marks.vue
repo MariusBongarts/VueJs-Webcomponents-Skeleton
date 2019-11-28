@@ -1,8 +1,7 @@
 <template>
   <div class="home">
 
-      <h1>Home</h1>
-      <button @click="logout()">Logout</button>
+      <h1>Marks</h1>
 
   </div>
 </template>
@@ -20,7 +19,7 @@ import NavBar from './../components/NavBar.vue';
     NavBar
   }
 })
-export default class Home extends Vue {
+export default class Marks extends Vue {
   userService = new UserService();
   @Mutation emitLogout!: () => void;
   show = true;
@@ -45,6 +44,13 @@ export default class Home extends Vue {
 @import './../variables.scss';
 .home {
   display: flex;
+  flex-wrap: wrap;
+  background: $secondary-light;
 }
 
+.box {
+  background: red;
+  width: 200px;
+  height: 200px;
+}
 </style>

@@ -8,9 +8,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Particles extends Vue {
-
   mounted() {
-    require("particles.js");
+    require('particles.js');
     this.$nextTick(() => {
       this.initParticlesJS();
     });
@@ -18,7 +17,7 @@ export default class Particles extends Vue {
 
   initParticlesJS() {
     /* eslint-disable */
-    particlesJS("particles-js", {
+    particlesJS('particles-js', {
       particles: {
         number: {
           value: 120,
@@ -28,17 +27,17 @@ export default class Particles extends Vue {
           }
         },
         color: {
-          value: "#00b077"
+          value: '#00b077'
         },
         shape: {
-          type: "circle",
+          type: 'circle',
           stroke: {
             width: 0,
-            color: "#00b077"
+            color: '#00b077'
           },
           polygon: { nb_sides: 5 },
           image: {
-            src: "img/github.svg",
+            src: 'img/github.svg',
             width: 100,
             height: 100
           }
@@ -66,31 +65,31 @@ export default class Particles extends Vue {
         line_linked: {
           enable: true,
           distance: 150,
-          color: "#00b077",
+          color: '#00b077',
           opacity: 0.6,
           width: 1.1
         },
         move: {
           enable: true,
           speed: 6,
-          direction: "none",
+          direction: 'none',
           random: false,
           straight: false,
-          out_mode: "out",
+          out_mode: 'out',
           bounce: false,
           attract: { enable: false, rotateX: 600, rotateY: 1200 }
         }
       },
       interactivity: {
-        detect_on: "canvas",
+        detect_on: 'canvas',
         events: {
           onhover: {
             enable: false,
-            mode: "repulse"
+            mode: 'repulse'
           },
           onclick: {
             enable: true,
-            mode: "push"
+            mode: 'push'
           },
           resize: true
         },
@@ -121,10 +120,10 @@ export default class Particles extends Vue {
         }
       },
       interactivity: {
-        detect_on: "canvas",
+        detect_on: 'canvas',
         events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: true, mode: "push" },
+          onhover: { enable: true, mode: 'repulse' },
+          onclick: { enable: true, mode: 'push' },
           resize: true
         },
         modes: {
@@ -147,7 +146,7 @@ export default class Particles extends Vue {
 }
 </script>
 
-<style  lang="scss">
+<style lang="scss">
 /* Your styles */
 @import './../variables.scss';
 
@@ -160,7 +159,7 @@ canvas {
 #particles-js {
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: $secondary-dark;
   background-repeat: no-repeat;
   background-size: cover;

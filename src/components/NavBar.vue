@@ -1,26 +1,37 @@
 <template>
   <div class="nav-bar">
-    Test
+    <NavBarMain></NavBarMain>
+    <NavBarSub></NavBarSub>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import SlideInTransition from './../components/Transitions/SlideInTransition.vue';
+import NavBarSub from './../components/NavBarSub.vue';
+import NavBarMain from './../components/NavBarMain.vue';
+import NavBarMainItem from './../components/NavBarMainItem.vue';
 
-@Component
+@Component({
+  components: {
+    SlideInTransition,
+    NavBarSub,
+    NavBarMain,
+    NavBarMainItem
+  }
+})
 export default class NavBar extends Vue {
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-@import "./../variables.scss";
+@import './../variables.scss';
 
 .nav-bar {
   height: 100vh;
   margin: 0;
-  width: 200px;
-  background: $secondary-color;
+  display: flex;
+  z-index: 9999 !important;
 }
-
 </style>

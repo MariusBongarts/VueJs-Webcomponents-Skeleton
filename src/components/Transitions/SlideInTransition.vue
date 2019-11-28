@@ -23,7 +23,7 @@ export default class SlideInTransition extends Vue {
   transform: translateX(-100%);
 }
 .v-enter-active  {
-  transition: all 1s;
+  transition: all .5s;
 }
 .v-enter-to {
   opacity: 1;
@@ -34,7 +34,7 @@ export default class SlideInTransition extends Vue {
   opacity: 1;
 }
 .v-leave-active {
-  transition: all 1s;
+  transition: all .5s;
 }
 .v-leave-to {
   opacity: 0;
