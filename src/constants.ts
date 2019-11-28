@@ -3,37 +3,37 @@ export const NAV_ITEMS_MAIN: NavItemMain[] = [
   {
     name: 'home',
     displayName: 'Home',
-    icon: 'home',
+    icon: 'HomeIcon',
     route: 'home'
   },
   {
     name: 'marks',
     displayName: 'Marks',
-    icon: 'mark',
+    icon: 'MarkIcon',
     route: 'marks'
   },
   {
     name: 'bookmarks',
     displayName: 'Bookmarks',
-    icon: 'bookmark',
+    icon: 'BookmarkIcon',
     route: 'bookmarks'
   },
   {
     name: 'tags',
     displayName: 'Tags',
-    icon: 'tag',
+    icon: 'TagIcon',
     route: 'tags'
   },
   {
     name: 'settings',
     displayName: 'Settings',
-    icon: 'settings',
+    icon: 'SettingsIcon',
     route: 'settings'
   },
   {
     name: 'account',
     displayName: 'Account',
-    icon: 'account',
+    icon: 'AccountIcon',
     route: 'account'
   },
 ];

@@ -4,23 +4,7 @@
     :class="{ active: active }"
     @click="toggleNavItem()"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="30"
-      height="30"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="feather feather-settings"
-    >
-      <circle cx="12" cy="12" r="3"></circle>
-      <path
-        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
-      ></path>
-    </svg>
+<component :is="navItem.icon"></component>
   </div>
 </template>
 
@@ -30,9 +14,22 @@ import { NavItemMain } from '../models/NavItemMain';
 import { Mutation } from 'vuex-class';
 import { NavigationStore } from '../store/navigation-store';
 import { Route } from 'vue-router';
+import SettingsIcon from './Icons/SettingsIcon.vue';
+import AccountIcon from './Icons/AccountIcon.vue';
+import BookmarkIcon from './Icons/BookmarkIcon.vue';
+import MarkIcon from './Icons/MarkIcon.vue';
+import TagIcon from './Icons/TagIcon.vue';
+import HomeIcon from './Icons/HomeIcon.vue';
 
 @Component({
-  components: {}
+  components: {
+    SettingsIcon,
+    AccountIcon,
+    BookmarkIcon,
+    MarkIcon,
+    TagIcon,
+    HomeIcon
+  }
 })
 export default class NavBarMainItem extends Vue {
   active = false;
@@ -62,7 +59,6 @@ export default class NavBarMainItem extends Vue {
    * When the navItem is inactive, it will be navigated to route
    */
   async toggleNavItem(item: string) {
-
     if (this.active && NavigationStore.state.showSubMenu) {
       this.closeSubMenu();
     } else {
