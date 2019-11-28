@@ -45,13 +45,13 @@ export default class NavBar extends Vue {
   showMobileNav = false;
 
   mounted() {
-    this.mobile = screen.width < 720;
+    this.mobile = screen.width < 900;
     this.listenForResize();
   }
 
   listenForResize() {
     window.addEventListener('resize', () => {
-      this.mobile = window.innerWidth < 720;
+      this.mobile = window.innerWidth < 900;
     });
   }
 
