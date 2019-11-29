@@ -20,6 +20,7 @@ import BookmarkIcon from './Icons/BookmarkIcon.vue';
 import MarkIcon from './Icons/MarkIcon.vue';
 import TagIcon from './Icons/TagIcon.vue';
 import HomeIcon from './Icons/HomeIcon.vue';
+import FolderIcon from './../components/Icons/FolderIcon.vue';
 
 @Component({
   components: {
@@ -28,7 +29,8 @@ import HomeIcon from './Icons/HomeIcon.vue';
     BookmarkIcon,
     MarkIcon,
     TagIcon,
-    HomeIcon
+    HomeIcon,
+    FolderIcon
   }
 })
 export default class NavBarMainItem extends Vue {

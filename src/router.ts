@@ -30,29 +30,30 @@ const router = new Router({
       component: Home,
     },
     {
-      path: '/marks',
-      name: 'marks',
-      component: Marks,
+      path: '/directories',
+      name: 'directories',
+      component: () => import(/* webpackChunkName: "about" */ './views/Directories.vue')
     },
     {
       path: '/bookmarks',
       name: 'bookmarks',
-      component: Bookmarks,
+      component: () => import(/* webpackChunkName: "about" */ './views/Bookmarks.vue'),
+
     },
     {
       path: '/tags',
       name: 'tags',
-      component: Tags,
+      component: () => import(/* webpackChunkName: "about" */ './views/Tags.vue'),
     },
     {
       path: '/settings',
       name: 'settings',
-      component: Settings,
+      component: () => import(/* webpackChunkName: "about" */ './views/Settings.vue'),
     },
     {
       path: '/account',
       name: 'account',
-      component: Account,
+      component: () => import(/* webpackChunkName: "about" */ './views/Account.vue'),
     },
     {
       path: '/about',

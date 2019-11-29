@@ -37,7 +37,7 @@ import CloseIcon from './../components/Icons/CloseIcon.vue';
     NavBarMain,
     NavBarMainItem,
     MenuIcon,
-    CloseIcon
+    CloseIcon,
   }
 })
 export default class NavBar extends Vue {

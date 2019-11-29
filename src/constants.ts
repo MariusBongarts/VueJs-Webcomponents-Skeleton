@@ -7,10 +7,10 @@ export const NAV_ITEMS_MAIN: NavItemMain[] = [
     route: 'home'
   },
   {
-    name: 'marks',
-    displayName: 'Marks',
-    icon: 'MarkIcon',
-    route: 'marks'
+    name: 'directories',
+    displayName: 'Directories',
+    icon: 'FolderIcon',
+    route: 'directories'
   },
   {
     name: 'bookmarks',

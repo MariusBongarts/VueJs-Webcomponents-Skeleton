@@ -1,7 +1,7 @@
 <template>
   <div class="home">
 
-      <h1>Marks</h1>
+      <h1>Directories</h1>
 
   </div>
 </template>
@@ -19,7 +19,7 @@ import NavBar from './../components/NavBar.vue';
     NavBar
   }
 })
-export default class Marks extends Vue {
+export default class Directories extends Vue {
   userService = new UserService();
   @Mutation emitLogout!: () => void;
   show = true;
