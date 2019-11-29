@@ -80,7 +80,7 @@ export default class NavBarMainItem extends Vue {
 @import './../variables.scss';
 
 .main-nav-item {
-  width: 75;
+  width: 75px;
   height: 75px;
   line-height: 75px;
   text-align: center;
