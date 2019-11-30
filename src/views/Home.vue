@@ -1,9 +1,10 @@
 <template>
   <div class="home">
-
-      <h1>Home</h1>
-      <button @click="logout()">Logout</button>
-
+    <h1>Home</h1>
+    <button @click="logout()">Logout</button>
+    <div class="marks-container" v-for="(mark, index) in marks" :key="index">
+      {{ mark.text }}
+    </div>
   </div>
 </template>
 
@@ -14,6 +15,8 @@ import { Getter, Mutation } from 'vuex-class';
 import SlideInTransition from './../components/Transitions/SlideInTransition.vue';
 import NavBar from './../components/NavBar.vue';
 import { MarkerService } from '../services/marker.service';
+import { Mark } from '../models/mark';
+import { MarksStore } from './../store/marks-store';
 
 @Component({
   components: {
@@ -26,10 +29,19 @@ export default class Home extends Vue {
   markService = new MarkerService();
   @Mutation emitLogout!: () => void;
   show = true;
+  marks: Mark[] = [];
 
   async mounted() {
-    const marks = await this.markService.getMarks();
-    console.log(marks);
+    this.listenForState();
+    this.marks = MarksStore.state.marks;
+  }
+
+  listenForState() {
+    this.$store.subscribe(state => {
+      if (MarksStore.state.marks !== this.marks) {
+        this.marks = MarksStore.state.marks;
+      }
+    });
   }
 
   async logout() {
@@ -52,6 +64,13 @@ export default class Home extends Vue {
 @import './../variables.scss';
 .home {
   display: flex;
+  flex-wrap: wrap;
 }
 
+.marks-container {
+  width: 100%;
+  background: white;
+  margin: 5px;
+  padding: 5px;
+}
 </style>

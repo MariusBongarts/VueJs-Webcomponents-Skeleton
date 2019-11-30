@@ -22,6 +22,7 @@
     "trailing-comma": false,
     "curly": false,
     "no-unused-expression": false,
-    "member-ordering": false
+    "member-ordering": false,
+    "no-shadowed-variable": false
   }
 }

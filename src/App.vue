@@ -19,6 +19,8 @@ import { Getter, Mutation } from 'vuex-class';
 import NavBar from './components/NavBar.vue';
 import { AuthStore } from './store/auth-store';
 import { SocketService } from './services/socket.service';
+import { MarkerService } from './services/marker.service';
+import { MarksStore } from './store/marks-store';
 
 @Component({
   components: {
@@ -27,15 +29,26 @@ import { SocketService } from './services/socket.service';
 })
 export default class App extends Vue {
   loggedIn = false;
+  @Mutation initMarks!: () => void;
 
-  mounted() {
+  async mounted() {
     this.loggedIn = !!AuthStore.state.jwt;
     this.$store.subscribe(() => {
       this.loggedIn = !!AuthStore.state.jwt;
     });
 
-    // Start socket connection
-    const socketService = new SocketService();
+    this.loadInitialData();
+  }
+
+  // We don´t need to wait for this. It can be loaded asynchronously
+  loadInitialData() {
+    this.loadMarks();
+  }
+
+  async loadMarks() {
+    const markService = new MarkerService();
+    MarksStore.state.marks = (await markService.getMarks()) || [];
+    this.initMarks();
   }
 }
 </script>

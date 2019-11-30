@@ -1,6 +1,8 @@
 import { Mark } from './../models/mark';
 import { AuthStore } from './../store/auth-store';
+import { MarksStore } from './../store/marks-store';
 import openSocket from 'socket.io-client';
+import store from '@/store/store';
 
 export class SocketService {
   socket!: SocketIOClient.Socket;
@@ -13,20 +15,19 @@ export class SocketService {
   initSocket() {
     const jwt = AuthStore.state.jwt;
     const jwtPayload = AuthStore.getters.getJwtPayload();
-    console.log(jwtPayload);
     if (process.env.VUE_APP_MODE === 'prod') {
-      console.log('prod');
       this.socket = openSocket(process.env.VUE_APP_SOCKET_URL, { query: { jwt } });
     } else {
-      console.log('dev');
-      this.socket = openSocket(process.env.VUE_APP_SOCKET_URL, { query: { jwt }, transports: ['websocket', 'xhr-polling'] });
+      this.socket = openSocket(process.env.VUE_APP_SOCKET_URL, { query: { jwt } });
     }
     this.socket.emit('join', { id: jwtPayload._id, email: jwtPayload.email });
   }
 
   handleSockets() {
+
     this.socket.on('createMark', (createdMark: Mark) => {
       console.log('createdMark');
+      store.commit('addMark', createdMark, { root: true });
       console.log(createdMark);
     });
 
