@@ -1,7 +1,6 @@
 <template>
   <div
     class="main-nav-item"
-    :class="{ active: active }"
     @click="toggleNavItem()"
   >
     <img @click="navigate('/')" :src="require('./../assets/logoNew2.png')" />
@@ -40,6 +39,6 @@ img {
   height: 50%;
   border-radius: 50%;
   margin: auto;
-  box-shadow: 0px 0px 20px 10px $primary-color-transparent;
+  box-shadow: 0px 0px 10px 5px $primary-color-transparent;
 }
 </style>
