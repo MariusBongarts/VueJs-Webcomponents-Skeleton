@@ -3,7 +3,7 @@
     class="main-nav-item"
     @click="toggleNavItem()"
   >
-    <img @click="navigate('/')" :src="require('./../assets/logoNew2.png')" />
+    <img @click="navigate('/')" :src="require('./../assets/icons/icon-192x192.png')" />
   </div>
 </template>
 
