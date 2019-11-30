@@ -1,26 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
 
     <!-- PWA Web App configuration -->
-    <link rel="manifest" href="/manifest.json"/>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="DC-Covers">
-    <meta name="msapplication-TileImage" content="link to the image in static folder">
-    <meta name="msapplication-TileColor" content="#000">
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="DC-Covers" />
+    <meta
+      name="msapplication-TileImage"
+      content="link to the image in static folder"
+    />
+    <meta name="msapplication-TileColor" content="#000" />
 
     <title>Web Highlights</title>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but mark-my-words doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong
+        >We're sorry but mark-my-words doesn't work properly without JavaScript
+        enabled. Please enable it to continue.</strong
+      >
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+
+  <script>
+    let installPromptEvent;
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('service-worker.js')
+        .then(function(reg) {
+          console.log('Service worker registered!');
+        })
+        .catch(function(err) {
+          console.log("Service worker not found. This happened: ", err);
+        });
+    }
+  </script>
 </html>
