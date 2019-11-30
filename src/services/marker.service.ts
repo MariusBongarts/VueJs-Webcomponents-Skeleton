@@ -1,65 +1,82 @@
-// import { JwtService } from './jwt.service';
-// import openSocket from 'socket.io-client';
-// import { Mark } from './../models/mark';
-// import { HttpClient } from './http-client';
-// import { environment } from '../environments/environment.dev';
+import { Mark } from './../models/mark';
+import { HttpClient } from './http-client';
 
-// export class MarkerService {
-//   httpClient!: HttpClient;
-//   socket: any;
-//   jwtService = new JwtService();
+export class MarkerService {
+  httpClient!: HttpClient;
+  // bookmarkService = new BookmarkService();
+  // tagsService = new TagsService();
 
-//   constructor() {
-//     this.httpClient = new HttpClient({ baseURL: environment.BACKEND_URL });
-//   }
+  constructor() {
+    this.httpClient = new HttpClient({ baseURL: process.env.VUE_APP_BACKEND_URL });
+  }
 
-//   async initSocket() {
-//     const jwt = await this.jwtService.getJwt();
+  async getMarks(): Promise<Mark[] | undefined> {
+    try {
+      const response = await this.httpClient.get('/marks');
+      const marks: Mark[] = (await response.json() as Mark[]);
+      return marks;
+    } catch (error) {
+      //
+    }
+  }
 
-//     if (environment.production) {
-//       this.socket = openSocket(environment.SOCKET_URL, { query: { jwt: jwt } });
-//     } else {
-//       this.socket = openSocket(environment.SOCKET_URL, { query: { jwt: jwt }, transports: ['websocket'] });
-//     }
-//   }
-//   async getMarks(): Promise<Mark[]> {
-//     const response = await this.httpClient.get('/marks');
-//     const marks: Mark[] = (await response.json() as Mark[]);
-//     return marks;
-//   }
+  // async getMarksForUrl(url: string): Promise<Mark[]> {
+  //   try {
+  //     const response = await this.httpClient.get('/marks/url?url=' + url);
+  //     const marks: Mark[] = (await response.json() as Mark[]);
+  //     return marks;
+  //   } catch (error) {
+  //     logout();
+  //   }
+  // }
 
-//   async getMarksForUrl(url: string): Promise<Mark[]> {
-//     const response = await this.httpClient.get('/marks/url?url=' + url);
-//     const marks: Mark[] = (await response.json() as Mark[]);
-//     return marks;
-//   }
+  // async createMark(mark: Mark): Promise<Mark | undefined> {
+  //   mark = this.addTagsOfBookmark(mark);
+  //   addMark(mark);
+  //   //await this.emitSocket('createMark', mark);
+  //   const response = await this.httpClient.post('/marks', mark);
+  //   const createdMark: Mark = (await response.json() as Mark);
 
-//   async createMark(mark: Partial<Mark>): Promise<Mark | undefined> {
-//     !this.socket ? await this.initSocket() : '';
-//     this.socket.emit('createMark', mark);
+  //   // Reload bookmarks to update for changes (If first mark on page is made, bookmark will be created)
+  //   await this.bookmarkService.getBookmarks();
 
-//     const response = await this.httpClient.post('/marks', mark);
-//     const createdMark: Mark = (await response.json() as Mark);
-//     console.log(`Created mark with id ${createdMark.id}`);
-//     return createdMark;
-//   }
+  //   return createdMark;
+  // }
 
-//   async deleteMark(markId: string): Promise<void> {
-//     !this.socket ? await this.initSocket() : '';
-//     this.socket.emit('deleteMark', markId);
-//     await this.httpClient.delete('/marks/' + markId);
-//   }
+  // async deleteMark(markId: string): Promise<void> {
+  //   removeMark(markId)
+  //   await this.httpClient.delete('/marks/' + markId);
 
-//   async updateMark(mark: Mark): Promise<void> {
-//     !this.socket ? await this.initSocket() : '';
-//     this.socket.emit('updateMark', mark);
-//     await this.httpClient.put('/marks', mark);
-//   }
+  // // Reload bookmarks to update for changes (If last mark gets deleted, bookmark will be deleted if not starred)
+  //   await this.bookmarkService.getBookmarks();
+  // }
 
-//   async getMarkById(id: string): Promise<Mark> {
-//     const response = await this.httpClient.get('/marks/' + id);
-//     console.log(response);
-//     const mark = (await response.json() as Mark);
-//     return mark;
-//   }
-// }
+  // async updateMark(mark: Mark): Promise<void> {
+  //   updateMark(mark);
+  //   await this.httpClient.put('/marks', mark);
+  //   await this.tagsService.getTags();
+  // }
+
+  // async getMarkById(id: string): Promise<Mark> {
+  //   const response = await this.httpClient.get('/marks/' + id);
+  //   const mark = (await response.json() as Mark);
+  //   return mark;
+  // }
+
+  // /**
+  //  * Adds the tags of the current bookmark to the created mark
+  //  *
+  //  * @param {Mark} mark
+  //  * @memberof MarkerService
+  //  */
+  // addTagsOfBookmark(mark: Mark) {
+  //   try {
+  //     const bookmark = store.getState().bookmarks.find(bookmark => bookmark.url === mark.url);
+  //     if (bookmark && bookmark.tags) mark.tags = [...new Set([...mark.tags, ...bookmark.tags])];
+  //   } catch (error) {
+  //     //
+  //   }
+  //   return mark;
+  // }
+
+}

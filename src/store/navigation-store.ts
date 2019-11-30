@@ -1,5 +1,4 @@
 import { NavigationState } from './navigation-state';
-import { State } from './../models/state';
 import { GetterTree, MutationTree } from 'vuex';
 
 const state: NavigationState = {

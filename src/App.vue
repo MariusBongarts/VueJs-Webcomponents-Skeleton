@@ -18,6 +18,7 @@ import { UserService } from './services/user.service';
 import { Getter, Mutation } from 'vuex-class';
 import NavBar from './components/NavBar.vue';
 import { AuthStore } from './store/auth-store';
+import { SocketService } from './services/socket.service';
 
 @Component({
   components: {
@@ -32,6 +33,9 @@ export default class App extends Vue {
     this.$store.subscribe(() => {
       this.loggedIn = !!AuthStore.state.jwt;
     });
+
+    // Start socket connection
+    const socketService = new SocketService();
   }
 }
 </script>

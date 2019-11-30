@@ -6,17 +6,19 @@ export class SocketService {
   socket!: SocketIOClient.Socket;
 
   constructor() {
-    // this.initSocket();
-    // this.handleSockets();
+    this.initSocket();
+    this.handleSockets();
   }
 
   initSocket() {
     const jwt = AuthStore.state.jwt;
     const jwtPayload = AuthStore.getters.getJwtPayload();
     console.log(jwtPayload);
-    if (process.env.VUE_APP_MODE === 'Production') {
+    if (process.env.VUE_APP_MODE === 'prod') {
+      console.log('prod');
       this.socket = openSocket(process.env.VUE_APP_SOCKET_URL, { query: { jwt } });
     } else {
+      console.log('dev');
       this.socket = openSocket(process.env.VUE_APP_SOCKET_URL, { query: { jwt }, transports: ['websocket', 'xhr-polling'] });
     }
     this.socket.emit('join', { id: jwtPayload._id, email: jwtPayload.email });
@@ -39,7 +41,7 @@ export class SocketService {
     });
 
     this.socket.on('connect', (data: string) => {
-      console.log('yeah');
+      console.log('Socket connection successful!');
     });
   }
 

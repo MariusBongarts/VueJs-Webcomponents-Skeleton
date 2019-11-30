@@ -13,6 +13,7 @@ import { UserService } from './../services/user.service';
 import { Getter, Mutation } from 'vuex-class';
 import SlideInTransition from './../components/Transitions/SlideInTransition.vue';
 import NavBar from './../components/NavBar.vue';
+import { MarkerService } from '../services/marker.service';
 
 @Component({
   components: {
@@ -22,8 +23,14 @@ import NavBar from './../components/NavBar.vue';
 })
 export default class Home extends Vue {
   userService = new UserService();
+  markService = new MarkerService();
   @Mutation emitLogout!: () => void;
   show = true;
+
+  async mounted() {
+    const marks = await this.markService.getMarks();
+    console.log(marks);
+  }
 
   async logout() {
     this.emitLogout();

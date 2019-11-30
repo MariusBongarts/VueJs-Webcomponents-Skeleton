@@ -1,9 +1,9 @@
 import { JwtPayload } from './../models/jwtPayload';
-import { State } from './../models/state';
+import { AuthState } from './auth-state';
 import { GetterTree, MutationTree } from 'vuex';
 import jwt_decode from 'jwt-decode';
 
-const state: State = {
+const state: AuthState = {
   jwt: localStorage.jwt_webmarker
 };
 
@@ -11,7 +11,7 @@ const getters = {
   getJwtPayload: () => jwt_decode(state.jwt) as JwtPayload
 };
 
-const mutations: MutationTree<State> = {
+const mutations: MutationTree<AuthState> = {
   emitLogout: () => {
     state.jwt = '';
     localStorage.jwt_webmarker = '';
