@@ -1,9 +1,9 @@
 <template>
   <div class="mark-element">
     <blockquote>
-      {{mark.completeText.split(this.mark.text)[0]}}
-      <mark>{{this.mark.text}}</mark>
-      {{mark.completeText.split(this.mark.text)[1]}}
+      {{ mark.completeText.split(this.mark.text)[0] }}
+      <mark>{{ this.mark.text }}</mark>
+      {{ mark.completeText.split(this.mark.text)[1] }}
     </blockquote>
   </div>
 </template>
@@ -31,12 +31,13 @@ export default class MarkElement extends Vue {
 .mark-element {
   color: black;
   display: flex;
+  flex-wrap: wrap;
 }
 
 blockquote {
-  width: 100%;
   color: #555555;
   padding: 20px 30px 20px 75px;
+  box-sizing: content-box;
   line-height: 1.6;
   position: relative;
   margin: 0;
@@ -44,12 +45,12 @@ blockquote {
 
 blockquote::before {
   font-family: Arial;
-  content: "\201C";
+  content: '\201C';
   color: $primary-color;
-  font-size: 4em;
+  font-size: 5em;
   position: absolute;
   left: 10px;
-  top: -40px;
+  top: -45px;
 }
 
 blockquote:nth-of-type(even) {
@@ -62,5 +63,4 @@ blockquote:nth-of-type(even) {
 mark {
   background: $highlight-color;
 }
-
 </style>
