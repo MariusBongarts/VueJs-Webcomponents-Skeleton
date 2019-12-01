@@ -40,6 +40,7 @@ blockquote {
   box-sizing: content-box;
   line-height: 1.6;
   position: relative;
+  text-align: justify;
   margin: 0;
 }
 
