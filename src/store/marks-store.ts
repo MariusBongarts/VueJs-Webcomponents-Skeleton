@@ -22,7 +22,7 @@ const mutations: MutationTree<MarksState> = {
     }
   },
   deleteMark: (state, deletedMarkId: string) => {
-      state.marks = state.marks.filter(mark => mark._id === deletedMarkId);
+      state.marks = state.marks.filter(mark => mark._id !== deletedMarkId);
   },
   updateMark: (state, updatedMark: Mark) => {
       state.marks = state.marks.map(mark => mark.id === updatedMark._id ? updatedMark : mark);
