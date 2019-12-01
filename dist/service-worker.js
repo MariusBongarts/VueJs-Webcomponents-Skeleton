@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.dbdae88283bb6d4b3fb6138c95cf2f67.js"
+  "/precache-manifest.9af1b407f8e89a2f69a3bec5fc541b63.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "mark-my-words"});
