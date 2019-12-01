@@ -42,6 +42,7 @@ blockquote {
   position: relative;
   text-align: justify;
   margin: 0;
+  font-size: 1.2em;
 }
 
 blockquote::before {
