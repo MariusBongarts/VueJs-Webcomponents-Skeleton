@@ -70,6 +70,7 @@ export default class NavBar extends Vue {
   position: fixed;
   right: 10px;
   top: 10px;
+  z-index: 9999 !important;
 }
 
 .nav-bar {
