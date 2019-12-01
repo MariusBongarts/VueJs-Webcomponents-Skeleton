@@ -26,19 +26,15 @@ export class SocketService {
   handleSockets() {
 
     this.socket.on('createMark', (createdMark: Mark) => {
-      console.log('createdMark');
       store.commit('addMark', createdMark, { root: true });
-      console.log(createdMark);
     });
 
     this.socket.on('deleteMark', (deletedMarkId: string) => {
-      console.log('deleteMark');
-      console.log(deletedMarkId);
+      store.commit('deleteMark', deletedMarkId, { root: true });
     });
 
     this.socket.on('updateMark', (updatedMark: Mark) => {
-      console.log('updateMark');
-      console.log(updatedMark);
+      store.commit('updateMark', updatedMark, { root: true });
     });
 
     this.socket.on('connect', (data: string) => {

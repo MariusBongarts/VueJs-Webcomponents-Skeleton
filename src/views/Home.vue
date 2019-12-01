@@ -1,10 +1,13 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
-    <button @click="logout()">Logout</button>
-    <div class="marks-container" v-for="(mark, index) in marks" :key="index">
+    <MarkElement
+      class="marks-container"
+      v-for="(mark, index) in marks"
+      :key="index"
+      :mark="mark"
+    >
       {{ mark.text }}
-    </div>
+    </MarkElement>
   </div>
 </template>
 
@@ -14,6 +17,7 @@ import { UserService } from './../services/user.service';
 import { Getter, Mutation } from 'vuex-class';
 import SlideInTransition from './../components/Transitions/SlideInTransition.vue';
 import NavBar from './../components/NavBar.vue';
+import MarkElement from './../components/MarkElement.vue';
 import { MarkerService } from '../services/marker.service';
 import { Mark } from '../models/mark';
 import { MarksStore } from './../store/marks-store';
@@ -21,7 +25,8 @@ import { MarksStore } from './../store/marks-store';
 @Component({
   components: {
     SlideInTransition,
-    NavBar
+    NavBar,
+    MarkElement
   }
 })
 export default class Home extends Vue {
@@ -44,11 +49,6 @@ export default class Home extends Vue {
     });
   }
 
-  async logout() {
-    this.emitLogout();
-    await this.navigate('/');
-  }
-
   async navigate(route: string) {
     try {
       await this.$router.push(route);
@@ -65,7 +65,31 @@ export default class Home extends Vue {
 .home {
   display: flex;
   flex-wrap: wrap;
+  max-height: 100vh;
+  overflow-y: scroll;
 }
+
+// Custom scrollbar
+/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+@media (min-width: 600px) {
+  .home::-webkit-scrollbar {
+    width: 8px;
+  }
+  .home::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 50%;
+  }
+  .home::-webkit-scrollbar-thumb {
+    background: $primary-color;
+    height: 10px;
+    box-shadow: inset 0 0 6px $secondary-color;
+    border-radius: 10px;
+  }
+  .home::-webkit-scrollbar-thumb:hover {
+    background: $primary-dark;
+  }
+}
+//
 
 .marks-container {
   width: 100%;

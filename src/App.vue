@@ -72,6 +72,7 @@ body {
   padding: 0;
   display: flex;
   background: $secondary-light;
+  overflow: hidden;
 }
 
 .main {

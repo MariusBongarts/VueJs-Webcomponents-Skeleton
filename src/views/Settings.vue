@@ -1,8 +1,7 @@
 <template>
   <div class="home">
-
-      <h1>Settings</h1>
-
+    <h1>Settings</h1>
+    <button @click="logout()">Logout</button>
   </div>
 </template>
 
