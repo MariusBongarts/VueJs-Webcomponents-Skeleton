@@ -20,6 +20,7 @@ import { Route } from 'vue-router';
 import MarkElement from './../components/MarkElement.vue';
 import { Mark } from '../models/mark';
 import { MarksStore } from './../store/marks-store';
+import { MarkerService } from './../services/marker.service';
 
 @Component({
   components: {
@@ -28,10 +29,18 @@ import { MarksStore } from './../store/marks-store';
 })
 export default class MarkOverview extends Vue {
   marks: Mark[] = [];
+  @Mutation initMarks!: () => void;
 
   async mounted() {
     this.listenForState();
     this.marks = this.getSortedMarks();
+
+    // Load data if store is empty
+    if (!this.marks.length) {
+      const markService = new MarkerService();
+      MarksStore.state.marks = (await markService.getMarks()) || [];
+      this.initMarks();
+    }
   }
 
   listenForState() {
