@@ -41,12 +41,12 @@ export default class LandingPageInfo extends Vue {
 }
 
 .mainInfo {
-  font-size: 18px;
+  font-size: 1.5em;
   padding-bottom: 15px;
 }
 
 .subInfo {
-  font-size: 14px;
+  font-size: 1.1em;
 }
 
 hr.divider {

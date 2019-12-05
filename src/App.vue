@@ -71,6 +71,7 @@ body {
   text-align: center;
   margin: 0;
   padding: 0;
+  font-size: 1.2em;
   display: flex;
   background: $secondary-light;
   overflow: hidden;
