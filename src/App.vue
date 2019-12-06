@@ -36,7 +36,6 @@ export default class App extends Vue {
     this.$store.subscribe(() => {
       this.loggedIn = !!AuthStore.state.jwt;
     });
-
     this.loadInitialData();
   }
 

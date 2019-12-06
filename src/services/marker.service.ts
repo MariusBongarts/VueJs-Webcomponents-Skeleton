@@ -1,5 +1,7 @@
+import { AuthStore } from './../store/auth-store';
 import { Mark } from './../models/mark';
 import { HttpClient } from './http-client';
+import store from '@/store/store';
 
 export class MarkerService {
   httpClient!: HttpClient;
@@ -16,7 +18,7 @@ export class MarkerService {
       const marks: Mark[] = (await response.json() as Mark[]);
       return marks;
     } catch (error) {
-      //
+      store.commit('emitLogout', { root: true });
     }
   }
 

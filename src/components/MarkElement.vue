@@ -35,14 +35,14 @@ export default class MarkElement extends Vue {
 }
 
 blockquote {
-  color: #555555;
+  color: $font-color;
   padding: 20px 30px 20px 75px;
   box-sizing: content-box;
   line-height: 1.6;
   position: relative;
   text-align: justify;
   margin: 0;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 blockquote::before {
