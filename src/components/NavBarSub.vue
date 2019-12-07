@@ -1,6 +1,6 @@
 <template>
   <SlideInTransition>
-    <div class="sub-nav" v-if="show"></div>
+    <div class="sub-nav" v-if="show || mobile"></div>
   </SlideInTransition>
 </template>
 
@@ -20,10 +20,21 @@ import { AuthStore } from '../store/auth-store';
 export default class NavBarSub extends Vue {
   show: boolean = true;
 
+  // Subbar should always be visible on mobile devices
+  mobile = true;
+
   mounted() {
     this.show = NavigationStore.state.showSubMenu;
+    this.mobile = screen.width < 900;
+    this.listenForResize();
     this.$store.subscribe(() => {
       this.show = NavigationStore.state.showSubMenu;
+    });
+  }
+
+  listenForResize() {
+    window.addEventListener('resize', () => {
+      this.mobile = window.innerWidth < 900;
     });
   }
 }
@@ -40,9 +51,9 @@ export default class NavBarSub extends Vue {
   z-index: 9998;
 }
 
-@media(max-width: 900px) {
+@media (max-width: 900px) {
   .sub-nav {
-    width: 100vw;
+    width: 100%;
   }
 }
 </style>

@@ -81,4 +81,11 @@ export default class NavBar extends Vue {
   display: flex;
   z-index: 9999 !important;
 }
+
+@media(max-width: 900px) {
+  .sub-nav {
+    width: 100vw;
+  }
+}
+
 </style>

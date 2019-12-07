@@ -32,18 +32,18 @@ const router = new Router({
     {
       path: '/directories',
       name: 'directories',
-      component: () => import(/* webpackChunkName: "about" */ './views/Directories.vue')
+      component: Home,
     },
     {
       path: '/bookmarks',
       name: 'bookmarks',
-      component: () => import(/* webpackChunkName: "about" */ './views/Bookmarks.vue'),
+      component: Home,
 
     },
     {
       path: '/tags',
       name: 'tags',
-      component: () => import(/* webpackChunkName: "about" */ './views/Tags.vue'),
+      component: Home,
     },
     {
       path: '/settings',
