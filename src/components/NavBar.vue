@@ -17,7 +17,9 @@
     <SlideInTransition>
       <NavBarMain v-if="showMobileNav || !mobile"></NavBarMain>
     </SlideInTransition>
-    <NavBarSub v-if="!mobile"></NavBarSub>
+    <SlideInTransition>
+      <NavBarSub v-if="showMobileNav || !mobile"></NavBarSub>
+    </SlideInTransition>
   </div>
 </template>
 
@@ -37,7 +39,7 @@ import CloseIcon from './../components/Icons/CloseIcon.vue';
     NavBarMain,
     NavBarMainItem,
     MenuIcon,
-    CloseIcon,
+    CloseIcon
   }
 })
 export default class NavBar extends Vue {

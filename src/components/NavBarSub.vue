@@ -39,4 +39,10 @@ export default class NavBarSub extends Vue {
   background: $secondary-dark;
   z-index: 9998;
 }
+
+@media(max-width: 900px) {
+  .sub-nav {
+    width: 100vw;
+  }
+}
 </style>
