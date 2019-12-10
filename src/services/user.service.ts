@@ -17,10 +17,8 @@ export class UserService {
    * @memberof UserService
    */
   async login(loginUserDto: LoginUserDto): Promise<string> {
-    console.log("Login")
     const token = await httpClient.post('auth', loginUserDto);
     const jwtToken = token.data;
-    console.log(jwtToken);
     AuthStore.state.jwt = jwtToken;
     return jwtToken as string;
   }

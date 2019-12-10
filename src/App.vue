@@ -4,8 +4,11 @@
       <NavBar />
     </div>
 
-    <div v-if="loggedIn" class="main">
-      <router-view />
+    <div v-if="loggedIn" class="main-container">
+      <div v-if="!marksLoaded" class="loading">
+        <LoadingSpinner />
+      </div>
+      <router-view v-if="marksLoaded" />
     </div>
 
     <router-view v-if="!loggedIn" />
@@ -17,19 +20,25 @@ import { Component, Vue } from 'vue-property-decorator';
 import { UserService } from './services/user.service';
 import { Getter, Mutation } from 'vuex-class';
 import NavBar from './components/NavBar.vue';
+import LoadingSpinner from './components/LoadingSpinner.vue';
 import { AuthStore } from './store/auth-store';
 import { SocketService } from './services/socket.service';
 import { MarkerService } from './services/marker.service';
 import { MarksStore } from './store/marks-store';
+import { TagsService } from './services/tags.service';
+import { TagsStore } from './store/tags-store';
 
 @Component({
   components: {
-    NavBar
+    NavBar,
+    LoadingSpinner
   }
 })
 export default class App extends Vue {
   loggedIn = false;
+  marksLoaded = false;
   @Mutation initMarks!: () => void;
+  @Mutation initTags!: () => void;
 
   async mounted() {
     this.loggedIn = !!AuthStore.state.jwt;
@@ -42,12 +51,19 @@ export default class App extends Vue {
   // We don´t need to wait for this. It can be loaded asynchronously
   loadInitialData() {
     this.loadMarks();
+    this.loadTags();
   }
 
   async loadMarks() {
     const markService = new MarkerService();
     MarksStore.state.marks = (await markService.getMarks()) || [];
+    this.marksLoaded = true;
     this.initMarks();
+  }
+  async loadTags() {
+    const tagsService = new TagsService();
+    TagsStore.state.tags = (await tagsService.getTags()) || [];
+    this.initTags();
   }
 }
 </script>
@@ -76,9 +92,14 @@ body {
   overflow: hidden;
 }
 
-.main {
+.main-container {
   width: 100%;
   height: 100%;
   background: $secondary-light;
+  display: flex;
+}
+
+.loading {
+  margin: auto;
 }
 </style>

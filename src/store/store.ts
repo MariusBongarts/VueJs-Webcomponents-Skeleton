@@ -3,6 +3,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { AuthStore } from './auth-store';
 import { NavigationStore } from './navigation-store';
+import { TagsStore } from './tags-store';
 
 Vue.use(Vuex);
 
@@ -10,6 +11,7 @@ export default new Vuex.Store({
   modules: {
     auth: AuthStore,
     navigation: NavigationStore,
-    marks: MarksStore
+    marks: MarksStore,
+    tags: TagsStore
   }
 });
