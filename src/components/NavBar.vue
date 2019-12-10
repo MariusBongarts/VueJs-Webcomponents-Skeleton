@@ -18,7 +18,8 @@
       <NavBarMain v-if="showMobileNav || !mobile"></NavBarMain>
     </SlideInTransition>
     <SlideInTransition>
-      <NavBarSub v-if="showMobileNav || !mobile"></NavBarSub>
+      <NavBarSub
+      v-if="showMobileNav || !mobile"></NavBarSub>
     </SlideInTransition>
   </div>
 </template>
@@ -82,10 +83,9 @@ export default class NavBar extends Vue {
   z-index: 9999 !important;
 }
 
-@media(max-width: 900px) {
+@media (max-width: 900px) {
   .sub-nav {
     width: 100vw;
   }
 }
-
 </style>

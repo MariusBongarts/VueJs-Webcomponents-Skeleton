@@ -1,6 +1,11 @@
 <template>
   <SlideInTransition>
-    <div class="sub-nav" v-if="show || mobile"></div>
+    <div class="sub-nav" v-if="show || mobile">
+      <component
+        v-if="currentRoute"
+        :is="'NavBarSub-' + currentRoute"
+      ></component>
+    </div>
   </SlideInTransition>
 </template>
 
@@ -10,11 +15,19 @@ import SlideInTransition from './../components/Transitions/SlideInTransition.vue
 import { Getter, Mutation } from 'vuex-class';
 import { NavigationStore } from '@/store/navigation-store';
 import { AuthStore } from '../store/auth-store';
+import NavBarSubDirectories from './../components/NavBarSubDirectories.vue';
+import NavBarSubTags from './../components/NavBarSubTags.vue';
+import NavBarSubHome from './../components/NavBarSubHome.vue';
+import NavBarSubBookmarks from './../components/NavBarSubBookmarks.vue';
 
 @Component({
   components: {
     SlideInTransition,
-    NavBarSub
+    NavBarSub,
+    NavBarSubHome,
+    NavBarSubTags,
+    NavBarSubBookmarks,
+    NavBarSubDirectories
   }
 })
 export default class NavBarSub extends Vue {
@@ -23,10 +36,27 @@ export default class NavBarSub extends Vue {
   // Subbar should always be visible on mobile devices
   mobile = true;
 
+  // Defines which sub navbar will be shown
+  currentRoute: string = '';
+
   mounted() {
     this.show = NavigationStore.state.showSubMenu;
     this.mobile = screen.width < 900;
     this.listenForResize();
+    this.currentRoute = this.$route.name || '';
+    this.listenForRouter();
+  }
+
+  listenForRouter() {
+    this.$router.beforeEach((to, from, next) => {
+      if (this.currentRoute !== to.name) {
+        this.currentRoute = to.name || '';
+      }
+      next();
+    });
+  }
+
+  listenForState() {
     this.$store.subscribe(() => {
       this.show = NavigationStore.state.showSubMenu;
     });

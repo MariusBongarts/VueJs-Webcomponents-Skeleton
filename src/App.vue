@@ -75,7 +75,6 @@ export default class App extends Vue {
 <style lang="scss">
 @import './variables.scss';
 body {
-  // background: $secondary-dark;
   margin: 0;
   padding: 0;
   background-color: $secondary-light;
@@ -105,11 +104,11 @@ body {
   height: 100%;
   display: flex;
   background-color: $secondary-light;
-  transition: background-color 1s ease;
+  transition: background-color 2s ease;
 }
 
 .main-container.loading {
-  background-color: $secondary-dark;
+  background-color: $secondary-color;
 }
 
 .loading {

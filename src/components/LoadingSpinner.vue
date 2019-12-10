@@ -61,7 +61,6 @@ $color4: $highlight-color;
 $color5: $primary-color;
 $color6: $highlight-color;
 
-
 .group {
   position: relative;
 }
