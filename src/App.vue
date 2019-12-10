@@ -1,10 +1,14 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{ loading: !marksLoaded }">
     <div v-if="loggedIn">
       <NavBar />
     </div>
 
-    <div v-if="loggedIn" class="main-container">
+    <div
+      v-if="loggedIn"
+      class="main-container"
+      :class="{ loading: !marksLoaded }"
+    >
       <div v-if="!marksLoaded" class="loading">
         <LoadingSpinner />
       </div>
@@ -74,6 +78,7 @@ body {
   // background: $secondary-dark;
   margin: 0;
   padding: 0;
+  background-color: $secondary-light;
 }
 
 #app {
@@ -88,15 +93,23 @@ body {
   padding: 0;
   font-size: 1.2em;
   display: flex;
-  background: $secondary-light;
   overflow: hidden;
+}
+
+#app.loading {
+  background-color: $secondary-dark;
 }
 
 .main-container {
   width: 100%;
   height: 100%;
-  background: $secondary-light;
   display: flex;
+  background-color: $secondary-light;
+  transition: background-color 1s ease;
+}
+
+.main-container.loading {
+  background-color: $secondary-dark;
 }
 
 .loading {
