@@ -1,6 +1,7 @@
 import { AuthStore } from './../store/auth-store';
 import { LoginUserDto } from './../models/loginUserDto';
 import { HttpClient } from './http-client';
+import httpClient from './http-client.service';
 
 export class UserService {
   httpClient!: HttpClient;
@@ -16,10 +17,12 @@ export class UserService {
    * @memberof UserService
    */
   async login(loginUserDto: LoginUserDto): Promise<string> {
-    const token = await this.httpClient.post('/auth', loginUserDto);
-    const jwtToken = await token.json();
+    console.log("Login")
+    const token = await httpClient.post('auth', loginUserDto);
+    const jwtToken = token.data;
+    console.log(jwtToken);
     AuthStore.state.jwt = jwtToken;
-    return jwtToken.token;
+    return jwtToken as string;
   }
 
   async logout() {

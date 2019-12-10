@@ -1,21 +1,19 @@
-import { AuthStore } from './../store/auth-store';
 import { Mark } from './../models/mark';
-import { HttpClient } from './http-client';
 import store from '@/store/store';
+import httpClient from './http-client.service';
 
 export class MarkerService {
-  httpClient!: HttpClient;
   // bookmarkService = new BookmarkService();
   // tagsService = new TagsService();
 
   constructor() {
-    this.httpClient = new HttpClient({ baseURL: process.env.VUE_APP_BACKEND_URL });
+    //
   }
 
   async getMarks(): Promise<Mark[] | undefined> {
     try {
-      const response = await this.httpClient.get('/marks');
-      const marks: Mark[] = (await response.json() as Mark[]);
+      const response = await httpClient.get('/marks');
+      const marks: Mark[] = response.data;
       return marks;
     } catch (error) {
       store.commit('emitLogout', { root: true });
