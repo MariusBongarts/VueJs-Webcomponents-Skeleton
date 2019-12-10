@@ -45,6 +45,7 @@ export default class NavBarSub extends Vue {
     this.listenForResize();
     this.currentRoute = this.$route.name || '';
     this.listenForRouter();
+    this.listenForState();
   }
 
   listenForRouter() {
@@ -79,11 +80,34 @@ export default class NavBarSub extends Vue {
   width: 250px;
   background: $secondary-dark;
   z-index: 9998;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
+
+// Custom scrollbar
+/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+@media (min-width: 600px) {
+  .sub-nav::-webkit-scrollbar {
+    width: 5px;
+  }
+  .sub-nav::-webkit-scrollbar-track {
+    background:rgba(255, 255, 255, 0);
+  }
+  .sub-nav::-webkit-scrollbar-thumb {
+    background: $primary-color;
+    height: 10px;
+    box-shadow: inset 0 0 6px $secondary-color;
+    border-radius: 10px;
+  }
+  .sub-nav::-webkit-scrollbar-thumb:hover {
+    background: $primary-dark;
+  }
+}
+//
 
 @media (max-width: 900px) {
   .sub-nav {
-    width: 100%;
+    width: calc(100vw - 75px);
   }
 }
 </style>

@@ -46,6 +46,7 @@ export default class NavBarMain extends Vue {
   z-index: 9999 !important;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .main,

@@ -8,6 +8,13 @@ export const NAV_ITEMS_MAIN: NavItemMain[] = [
     main: true,
   },
   {
+    name: 'tags',
+    displayName: 'Tags',
+    icon: 'TagIcon',
+    route: 'tags',
+    main: true,
+  },
+  {
     name: 'directories',
     displayName: 'Directories',
     icon: 'FolderIcon',
@@ -22,17 +29,10 @@ export const NAV_ITEMS_MAIN: NavItemMain[] = [
     main: true,
   },
   {
-    name: 'tags',
-    displayName: 'Tags',
-    icon: 'TagIcon',
-    route: 'tags',
-    main: true,
-  },
-  {
-    name: 'account',
-    displayName: 'Account',
-    icon: 'AccountIcon',
-    route: 'account',
+    name: 'search',
+    displayName: 'Search',
+    icon: 'SearchIcon',
+    route: 'search',
     main: false,
   },
   {

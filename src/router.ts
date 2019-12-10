@@ -46,14 +46,14 @@ const router = new Router({
       component: Home,
     },
     {
+      path: '/search',
+      name: 'search',
+      component: Home,
+    },
+    {
       path: '/settings',
       name: 'settings',
       component: () => import(/* webpackChunkName: "about" */ './views/Settings.vue'),
-    },
-    {
-      path: '/account',
-      name: 'account',
-      component: () => import(/* webpackChunkName: "about" */ './views/Account.vue'),
     },
     {
       path: '/about',

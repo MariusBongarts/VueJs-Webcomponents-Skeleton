@@ -85,7 +85,7 @@ export default class NavBar extends Vue {
 
 @media (max-width: 900px) {
   .sub-nav {
-    width: 100vw;
+    width: calc(100vw - 75px);
   }
 }
 </style>

@@ -15,7 +15,7 @@ import { Mutation } from 'vuex-class';
 import { NavigationStore } from '../store/navigation-store';
 import { Route } from 'vue-router';
 import SettingsIcon from './Icons/SettingsIcon.vue';
-import AccountIcon from './Icons/AccountIcon.vue';
+import SearchIcon from './Icons/SearchIcon.vue';
 import BookmarkIcon from './Icons/BookmarkIcon.vue';
 import MarkIcon from './Icons/MarkIcon.vue';
 import TagIcon from './Icons/TagIcon.vue';
@@ -25,7 +25,7 @@ import FolderIcon from './../components/Icons/FolderIcon.vue';
 @Component({
   components: {
     SettingsIcon,
-    AccountIcon,
+    SearchIcon,
     BookmarkIcon,
     MarkIcon,
     TagIcon,
