@@ -12,7 +12,9 @@
       <div v-if="!marksLoaded" class="loading">
         <LoadingSpinner />
       </div>
-      <router-view v-if="marksLoaded" />
+      <BlurIn>
+        <router-view v-if="marksLoaded" />
+      </BlurIn>
     </div>
 
     <router-view v-if="!loggedIn" />
@@ -24,6 +26,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { UserService } from './services/user.service';
 import { Getter, Mutation } from 'vuex-class';
 import NavBar from './components/NavBar.vue';
+import BlurIn from './components/animations/BlurIn.vue';
 import LoadingSpinner from './components/LoadingSpinner.vue';
 import { AuthStore } from './store/auth-store';
 import { SocketService } from './services/socket.service';
@@ -35,7 +38,8 @@ import { TagsStore } from './store/tags-store';
 @Component({
   components: {
     NavBar,
-    LoadingSpinner
+    LoadingSpinner,
+    BlurIn
   }
 })
 export default class App extends Vue {

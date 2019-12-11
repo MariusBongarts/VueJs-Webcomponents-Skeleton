@@ -1,7 +1,7 @@
 <template>
   <div class="tag-item">
     <span>{{ tag.name }}</span>
-    <span class="badge">{{badge}}</span>
+    <i class="logo-badge">{{badge}}</i>
   </div>
 </template>
 
@@ -46,12 +46,18 @@ export default class NavBarSubTagsItem extends Vue {
   margin: 2px;
 }
 
-.badge {
-  background: $primary-dark;
-  border-radius: 50%;
-  width: 1.1em;
-  height: 1.1em;
-  line-height: 100%;
+
+.logo-badge {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  background-color: $primary-color;
+  font-size: 12px;
+  line-height: 2;
+  text-align: center;
+  margin: auto 5px;
 }
 
 @media (max-width: 900px) {

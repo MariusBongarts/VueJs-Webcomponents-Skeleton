@@ -37,13 +37,16 @@ import { Mutation } from 'vuex-class';
 import { NavigationStore } from '../store/navigation-store';
 import { Route } from 'vue-router';
 import MarkElement from './../components/MarkElement.vue';
+import BlurIn from './../components/animations/BlurIn.vue';
 import { Mark } from '../models/mark';
 import { MarksStore } from './../store/marks-store';
 import { MarkerService } from './../services/marker.service';
 import { timeSinceTimestamp } from '../helper/dateHelper';
+
 @Component({
   components: {
-    MarkElement
+    MarkElement,
+    BlurIn
   }
 })
 export default class MarkOverview extends Vue {
@@ -115,7 +118,7 @@ export default class MarkOverview extends Vue {
 
 .url-marks {
   margin-top: 50px;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   padding: 50px 0px;
 
   .header {
@@ -135,7 +138,7 @@ export default class MarkOverview extends Vue {
 }
 
 .mark-element {
-  background: white;
+  background-color: white;
   margin-top: 30px;
 }
 
