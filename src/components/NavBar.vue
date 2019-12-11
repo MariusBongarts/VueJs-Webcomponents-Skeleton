@@ -72,7 +72,7 @@ export default class NavBar extends Vue {
 .close-menu {
   position: fixed;
   right: 10px;
-  top: 10px;
+  top: 20px;
   z-index: 9999 !important;
 }
 

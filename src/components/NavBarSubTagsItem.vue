@@ -29,6 +29,7 @@ export default class NavBarSubTagsItem extends Vue {
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 5px;
+  margin-bottom: 5px;
   margin-left: 5px;
   cursor: default;
   color: white;

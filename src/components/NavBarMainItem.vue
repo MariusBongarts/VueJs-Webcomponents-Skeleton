@@ -4,7 +4,7 @@
     :class="{ active: active }"
     @click="toggleNavItem()"
   >
-<component :is="navItem.icon"></component>
+    <component :is="navItem.icon"></component>
   </div>
 </template>
 
