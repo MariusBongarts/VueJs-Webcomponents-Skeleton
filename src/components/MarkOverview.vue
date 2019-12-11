@@ -20,7 +20,11 @@
       <div class="header">
         <h5>
           {{ getTimestamp(urlMark.createdAt) }} -
-          <a target="_blank" :href="urlMark.url">
+          <a
+            :data-tooltip="urlMark.url"
+            target="_blank"
+            :href="urlMark.url"
+          >
             {{ urlMark.url.split('/')[2] }}</a
           >
         </h5>
@@ -161,4 +165,5 @@ export default class MarkOverview extends Vue {
     padding: 50px 150px;
   }
 }
+
 </style>
