@@ -1,7 +1,7 @@
 <template>
   <div class="nav-tags-container">
     <div>
-      <SearchBarFilter />
+      <SearchBarFilter @input="e => applyFilter(e)" />
     </div>
     <div class="nav-tags">
       <NavBarSubTagsItem
@@ -32,6 +32,7 @@ import SearchBarFilter from './../components/SearchBarFilter.vue';
 export default class NavBarSubTags extends Vue {
   tags: Tag[] = [];
   tagsBadges: Array<{ tag: Tag; badgeValue: number }> = [];
+  filter = '';
 
   mounted() {
     this.tags = TagsStore.state.tags;
@@ -46,7 +47,7 @@ export default class NavBarSubTags extends Vue {
   }
 
   loadTags() {
-    this.tags = TagsStore.state.tags;
+    this.filterTags();
     this.tagsBadges = this.tags.map(tag => {
       return {
         tag,
@@ -58,9 +59,21 @@ export default class NavBarSubTags extends Vue {
     );
   }
 
+  filterTags() {
+    this.tags = TagsStore.state.tags.filter(tag =>
+      tag.name.toLowerCase().includes(this.filter.toLowerCase())
+    );
+  }
+
   getBadgeValue(tag: Tag) {
     return MarksStore.state.marks.filter(mark => mark.tags.includes(tag.name))
       .length;
+  }
+
+  // Filter got from SearchBar to filter tags
+  applyFilter(filter: string) {
+    this.filter = filter;
+    this.loadTags();
   }
 }
 </script>

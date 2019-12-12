@@ -18,8 +18,7 @@
       <NavBarMain v-if="showMobileNav || !mobile"></NavBarMain>
     </SlideInTransition>
     <SlideInTransition>
-      <NavBarSub
-      v-if="showMobileNav || !mobile"></NavBarSub>
+      <NavBarSub v-if="showMobileNav || !mobile"></NavBarSub>
     </SlideInTransition>
   </div>
 </template>
@@ -32,6 +31,7 @@ import NavBarMain from './../components/NavBarMain.vue';
 import NavBarMainItem from './../components/NavBarMainItem.vue';
 import MenuIcon from './../components/Icons/MenuIcon.vue';
 import CloseIcon from './../components/Icons/CloseIcon.vue';
+import { NavigationStore } from '../store/navigation-store';
 
 @Component({
   components: {
@@ -50,11 +50,19 @@ export default class NavBar extends Vue {
   mounted() {
     this.mobile = screen.width < 900;
     this.listenForResize();
+    this.listenForState();
   }
 
   listenForResize() {
     window.addEventListener('resize', () => {
       this.mobile = window.innerWidth < 900;
+    });
+  }
+  listenForState() {
+    this.$store.subscribe(state => {
+      if (this.mobile) {
+        this.showMobileNav = NavigationStore.state.showSubMenu;
+      }
     });
   }
 
@@ -68,11 +76,17 @@ export default class NavBar extends Vue {
 <style scoped lang="scss">
 @import './../variables.scss';
 
-.burger-menu,
+.burger-menu {
+  position: fixed;
+  left: 10px;
+  top: 15px;
+  z-index: 9999 !important;
+}
+
 .close-menu {
   position: fixed;
   right: 10px;
-  top: 20px;
+  top: 15px;
   z-index: 9999 !important;
 }
 

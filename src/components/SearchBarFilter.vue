@@ -3,10 +3,12 @@
     <SearchIcon />
     <input
       id="searchInput"
+      ref="searchInput"
       class="searchInput"
       type="search"
       placeholder="Filter"
       autocomplete="off"
+      @input="emitFilter()"
     />
   </div>
 </template>
@@ -23,7 +25,17 @@ import { Route } from 'vue-router';
     SearchIcon
   }
 })
-export default class SearchBarFilter extends Vue {}
+export default class SearchBarFilter extends Vue {
+  emitFilter(e: HTMLInputElement) {
+    const inputElement = this.$refs.searchInput as HTMLInputElement;
+    this.$emit('input', inputElement.value);
+  }
+
+  clearInput() {
+    const inputElement = this.$refs.searchInput as HTMLInputElement;
+    inputElement.value = '';
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -35,7 +47,8 @@ export default class SearchBarFilter extends Vue {}
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 75px;
+  height: 60px;
+  z-index: 9999 !important;
 }
 
 .search-bar-filter > *,

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { UserService } from './../services/user.service';
 import { Getter, Mutation } from 'vuex-class';
 import SlideInTransition from './../components/Transitions/SlideInTransition.vue';
@@ -14,6 +14,7 @@ import MarkOverview from './../components/MarkOverview.vue';
 import { MarkerService } from '../services/marker.service';
 import { Mark } from '../models/mark';
 import { MarksStore } from './../store/marks-store';
+import { Route } from 'vue-router';
 
 @Component({
   components: {
@@ -39,14 +40,6 @@ export default class Home extends Vue {
         this.marks = MarksStore.state.marks;
       }
     });
-  }
-
-  async navigate(route: string) {
-    try {
-      await this.$router.push(route);
-    } catch (error) {
-      //
-    }
   }
 }
 </script>

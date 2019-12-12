@@ -49,7 +49,7 @@ export default class NavBarMainItem extends Vue {
 
   @Watch('$route')
   onUrlChange(route: Route) {
-    if (route.name === this.navItem.name) {
+    if (route.path && route.path.includes(this.navItem.name)) {
       this.active = true;
     } else {
       this.active = false;
@@ -69,7 +69,7 @@ export default class NavBarMainItem extends Vue {
 
     // IMPORTANT: It is important that this action takes place after the previos closeSubMenu() action
     if (this.$route.name !== this.navItem.route) {
-      await this.$router.push(this.navItem.route);
+      await this.$router.push({name: this.navItem.name });
     }
   }
 }

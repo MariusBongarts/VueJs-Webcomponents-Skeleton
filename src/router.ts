@@ -46,6 +46,12 @@ const router = new Router({
       component: Home,
     },
     {
+      path: '/tags/:id',
+      name: 'tags',
+      component: Home,
+      props: true
+    },
+    {
       path: '/search',
       name: 'search',
       component: Home,

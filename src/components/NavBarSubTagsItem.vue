@@ -1,7 +1,7 @@
 <template>
-  <div class="tag-item">
+  <div class="tag-item" @click="navigateToTag()">
     <span>{{ tag.name }}</span>
-    <i class="logo-badge">{{badge}}</i>
+    <i class="logo-badge">{{ badge }}</i>
   </div>
 </template>
 
@@ -10,6 +10,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Tag } from '../models/tag';
 import { TagsStore } from '../store/tags-store';
 import { MarksStore } from '../store/marks-store';
+import { Mutation } from 'vuex-class';
 
 @Component({
   components: {}
@@ -17,6 +18,16 @@ import { MarksStore } from '../store/marks-store';
 export default class NavBarSubTagsItem extends Vue {
   @Prop() tag!: Tag;
   @Prop() badge!: number;
+  @Mutation closeSubMenu!: () => void;
+
+  async navigateToTag() {
+    try {
+      await this.$router.push('/tags/' + this.tag._id);
+      this.closeSubMenu();
+    } catch (error) {
+      //
+    }
+  }
 }
 </script>
 
@@ -46,7 +57,6 @@ export default class NavBarSubTagsItem extends Vue {
   padding: 3px;
   margin: 2px;
 }
-
 
 .logo-badge {
   position: relative;

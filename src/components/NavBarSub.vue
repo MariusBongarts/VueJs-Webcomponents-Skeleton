@@ -19,7 +19,8 @@ import NavBarSubDirectories from './../components/NavBarSubDirectories.vue';
 import NavBarSubTags from './../components/NavBarSubTags.vue';
 import NavBarSubHome from './../components/NavBarSubHome.vue';
 import NavBarSubBookmarks from './../components/NavBarSubBookmarks.vue';
-
+import NavBarSubSearch from './../components/NavBarSubSearch.vue';
+import NavBarSubSettings from './../components/NavBarSubSettings.vue';
 
 @Component({
   components: {
@@ -28,7 +29,9 @@ import NavBarSubBookmarks from './../components/NavBarSubBookmarks.vue';
     NavBarSubHome,
     NavBarSubTags,
     NavBarSubBookmarks,
-    NavBarSubDirectories
+    NavBarSubDirectories,
+    NavBarSubSettings,
+    NavBarSubSearch
   }
 })
 export default class NavBarSub extends Vue {

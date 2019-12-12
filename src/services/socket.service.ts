@@ -8,8 +8,10 @@ export class SocketService {
   socket!: SocketIOClient.Socket;
 
   constructor() {
-    this.initSocket();
-    this.handleSockets();
+    if (process.env.VUE_APP_MODE === 'prod') {
+      this.initSocket();
+      this.handleSockets();
+    }
   }
 
   initSocket() {
