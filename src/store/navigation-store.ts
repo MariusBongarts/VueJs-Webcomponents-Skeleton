@@ -2,7 +2,7 @@ import { NavigationState } from './navigation-state';
 import { GetterTree, MutationTree } from 'vuex';
 
 const state: NavigationState = {
-  showSubMenu: true
+  showSubMenu: screen.width < 900 ? false : true
 };
 
 const getters = {

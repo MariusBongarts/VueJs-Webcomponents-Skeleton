@@ -23,7 +23,9 @@ export default class NavBarSubTagsItem extends Vue {
   async navigateToTag() {
     try {
       await this.$router.push('/tags/' + this.tag._id);
-      this.closeSubMenu();
+
+      // Close sub menu only in mobile mode
+      if (screen.width < 900) this.closeSubMenu();
     } catch (error) {
       //
     }
