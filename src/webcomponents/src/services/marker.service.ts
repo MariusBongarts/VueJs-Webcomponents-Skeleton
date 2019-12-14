@@ -60,7 +60,6 @@ export class MarkerService {
 
   async getMarkById(id: string): Promise<Mark> {
     const response = await this.httpClient.get('/marks/' + id);
-    console.log(response);
     const mark = (await response.json() as Mark);
     return mark;
   }
