@@ -176,7 +176,7 @@ export default class MarkOverview extends Vue {
     if (this.selectedBookmark) {
       // TODO: Scroll to selected Bookmark
       marks = marks.filter(
-        mark => mark._bookmark === this.selectedBookmark!._id
+        mark => mark.url === this.selectedBookmark!.url
       );
       console.log(marks);
     }

@@ -121,7 +121,7 @@ export default class NavBarSubBookmarks extends Vue {
 
   getBadgeValue(bookmark: Bookmark) {
     return MarksStore.state.marks.filter(
-      mark => mark._bookmark === bookmark._id
+      mark => mark.url === bookmark.url
     ).length;
   }
 

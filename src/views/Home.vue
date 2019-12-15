@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <MarkOverview></MarkOverview>
+    <Overview></Overview>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import { UserService } from './../services/user.service';
 import { Getter, Mutation } from 'vuex-class';
 import SlideInTransition from './../components/Transitions/SlideInTransition.vue';
 import NavBar from './../components/NavBar.vue';
-import MarkOverview from './../components/MarkOverview.vue';
+import Overview from './../components/Overview.vue';
 import { MarkerService } from '../services/marker.service';
 import { Mark } from '../models/mark';
 import { MarksStore } from './../store/marks-store';
@@ -20,7 +20,7 @@ import { Route } from 'vue-router';
   components: {
     SlideInTransition,
     NavBar,
-    MarkOverview
+    Overview
   }
 })
 export default class Home extends Vue {
