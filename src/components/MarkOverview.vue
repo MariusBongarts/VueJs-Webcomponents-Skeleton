@@ -1,8 +1,10 @@
 <template>
   <div class="mark-overview" :v-if="urlMarks.length">
-    <div class="selected-header" v-if="selectedId">
+    <div class="selected-header" v-if="selectedId || selectedOrigin">
       <ArrowLeftIcon @click="navigateBack()" class="back-icon" />
-      <span>{{ getHeader() }}</span>
+      <span
+        >{{ getHeader() }}
+      </span>
     </div>
     <div
       class="url-marks"
@@ -49,6 +51,8 @@ import { MarkerService } from './../services/marker.service';
 import { timeSinceTimestamp } from '../helper/dateHelper';
 import { TagsStore } from '../store/tags-store';
 import { Tag } from '../models/tag';
+import { Bookmark } from '../models/bookmark';
+import { BookmarksStore } from '../store/bookmarks-store';
 
 @Component({
   components: {
@@ -65,6 +69,8 @@ export default class MarkOverview extends Vue {
   selectedId = '';
 
   selectedTag!: Tag | undefined;
+  selectedOrigin: string = '';
+  selectedBookmark!: Bookmark | undefined;
 
   // Same marks made on one page at same time
   urlMarks: MarkOverviewElementModel[] = [];
@@ -76,7 +82,11 @@ export default class MarkOverview extends Vue {
 
   navigateBack() {
     const currentRoute = this.$route.name || '';
-    this.$router.push({ name: currentRoute });
+    if (this.selectedBookmark) {
+      this.$router.go(-1);
+    } else {
+      this.$router.push({ name: currentRoute });
+    }
   }
 
   async loadMarks() {
@@ -94,11 +104,23 @@ export default class MarkOverview extends Vue {
   async onUrlChange(route: Route) {
     this.selectedId = this.$route.params.id || '';
     this.selectedTag = undefined;
+    this.selectedOrigin = '';
+    this.selectedBookmark = undefined;
     if (route.name === 'tags' && this.$route.params.id) {
       this.selectedTag = TagsStore.state.tags.find(
         tag => tag._id === this.selectedId
       );
     }
+    if (route.name === 'bookmarks' && this.$route.params.origin) {
+      this.selectedOrigin = this.$route.params.origin;
+    }
+
+    if (route.name === 'bookmarks' && this.$route.params.id) {
+      this.selectedBookmark = BookmarksStore.state.bookmarks.find(
+        bookmark => bookmark._id === this.$route.params.id
+      );
+    }
+
     await this.loadMarks();
   }
 
@@ -109,6 +131,12 @@ export default class MarkOverview extends Vue {
   getHeader() {
     if (this.selectedTag) {
       return this.selectedTag!.name;
+    }
+    if (this.selectedBookmark) {
+      return this.selectedBookmark.title;
+    }
+    if (this.selectedOrigin) {
+      return this.selectedOrigin;
     }
     return '';
   }
@@ -139,6 +167,18 @@ export default class MarkOverview extends Vue {
           mark.tags.length &&
           mark.tags.includes(this.selectedTag!.name)
       );
+    }
+
+    if (this.selectedOrigin && !this.selectedBookmark) {
+      marks = marks.filter(mark => mark.url.includes(this.selectedOrigin));
+    }
+
+    if (this.selectedBookmark) {
+      // TODO: Scroll to selected Bookmark
+      marks = marks.filter(
+        mark => mark._bookmark === this.selectedBookmark!._id
+      );
+      console.log(marks);
     }
 
     return marks;

@@ -97,7 +97,6 @@ export default class App extends Vue {
   async loadBookmarks() {
     const bookmarkService = new BookmarkService();
     BookmarksStore.state.bookmarks = (await bookmarkService.getBookmarks()) || [];
-    console.log(BookmarksStore.state.bookmarks);
     this.initBookmarks();
   }
   async loadDirectories() {

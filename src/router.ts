@@ -35,10 +35,27 @@ const router = new Router({
       component: Home,
     },
     {
+      path: '/directories/:id',
+      name: 'directories',
+      component: Home,
+      props: true
+    },
+    {
       path: '/bookmarks',
       name: 'bookmarks',
       component: Home,
-
+    },
+    {
+      path: '/bookmarks/:origin',
+      name: 'bookmarks',
+      component: Home,
+      props: true
+    },
+    {
+      path: '/bookmarks/:origin/:id',
+      name: 'bookmarks',
+      component: Home,
+      props: true
     },
     {
       path: '/tags',
