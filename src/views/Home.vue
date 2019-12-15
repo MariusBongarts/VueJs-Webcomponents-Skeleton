@@ -51,6 +51,7 @@ export default class Home extends Vue {
   display: flex;
   flex-wrap: wrap;
   max-height: 100vh;
+  width: 100%;
   overflow-y: scroll;
 }
 

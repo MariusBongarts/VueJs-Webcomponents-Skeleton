@@ -39,14 +39,13 @@ export default class NavBarSubBookmarksItem extends Vue {
 .bookmark-item {
   background-color: $secondary-color;
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: 5px;
   cursor: default;
   color: white;
-  font-size: 1rem;
+  font-size: 0.8rem;
   user-select: none;
   border-radius: 10px;
 }
@@ -58,6 +57,8 @@ export default class NavBarSubBookmarksItem extends Vue {
 .bookmark-item span {
   padding: 3px;
   margin: 2px;
+  width: 80%;
+  word-break: break-all;
 }
 
 .logo-badge {

@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div
-    v-if="!selected"
-    class="origin-item" @click="navigateToOrigin()">
+    <div v-if="!selected" class="origin-item" @click="navigateToOrigin()">
       <span>{{ origin }}</span>
       <i class="logo-badge">{{ badge }}</i>
     </div>
@@ -75,6 +73,8 @@ export default class NavBarSubBookmarksOriginItem extends Vue {
 .origin-item span {
   padding: 3px;
   margin: 2px;
+  width: 80%;
+  word-break: break-all;
 }
 
 .logo-badge {

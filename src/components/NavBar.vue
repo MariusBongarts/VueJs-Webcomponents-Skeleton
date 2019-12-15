@@ -84,6 +84,10 @@ export default class NavBar extends Vue {
   color: $secondary-color;
 }
 
+.close-menu {
+  color: $primary-color;
+}
+
 .nav-bar {
   height: 100vh;
   margin: 0;

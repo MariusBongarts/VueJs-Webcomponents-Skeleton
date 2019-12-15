@@ -45,15 +45,20 @@ export default class NavBarSubBookmarks extends Vue {
 
   mounted() {
     this.bookmarks = BookmarksStore.state.bookmarks;
+    this.getCurrentRouteInfo();
     this.loadData();
     this.listenForState();
   }
 
   // Check if an origin is selected
   @Watch('$route')
-  async onUrlChange(route: Route) {
+  async onUrlChange() {
+    this.getCurrentRouteInfo();
+  }
+
+  getCurrentRouteInfo() {
     this.selectedOrigin = '';
-    if (route.name === 'bookmarks' && this.$route.params.origin) {
+    if (this.$route.name === 'bookmarks' && this.$route.params.origin) {
       this.selectedOrigin = this.$route.params.origin;
     }
   }
