@@ -30,10 +30,14 @@ import BlurIn from './components/animations/BlurIn.vue';
 import LoadingSpinner from './components/LoadingSpinner.vue';
 import { AuthStore } from './store/auth-store';
 import { SocketService } from './services/socket.service';
-import { MarkerService } from './services/marker.service';
 import { MarksStore } from './store/marks-store';
+import { MarkerService } from './services/marker.service';
+import { BookmarkService } from './services/bookmarks.service';
 import { TagsService } from './services/tags.service';
+import { DirectoryService } from './services/directory.service';
 import { TagsStore } from './store/tags-store';
+import { BookmarksStore } from './store/bookmarks-store';
+import { DirectoryStore } from './store/directory-store';
 
 @Component({
   components: {
@@ -47,6 +51,8 @@ export default class App extends Vue {
   loaded = false;
   @Mutation initMarks!: () => void;
   @Mutation initTags!: () => void;
+  @Mutation initBookmarks!: () => void;
+  @Mutation initDirectories!: () => void;
 
   async mounted() {
     this.loggedIn = !!AuthStore.state.jwt;
@@ -68,8 +74,11 @@ export default class App extends Vue {
     this.loaded = false;
     await this.loadMarks();
 
-    // We don´t need to wait for the tags, they will be loaded asynchronously (Otherwise loading spinner takes too much time)
+    // We don´t need to wait for everything except the marks,
+    // the resst will be loaded asynchronously (Otherwise loading spinner takes too much time)
     this.loadTags();
+    this.loadBookmarks();
+    this.loadDirectories();
 
     this.loaded = true;
   }
@@ -83,8 +92,18 @@ export default class App extends Vue {
   async loadTags() {
     const tagsService = new TagsService();
     TagsStore.state.tags = (await tagsService.getTags()) || [];
-    console.log(TagsStore.state.tags);
     this.initTags();
+  }
+  async loadBookmarks() {
+    const bookmarkService = new BookmarkService();
+    BookmarksStore.state.bookmarks = (await bookmarkService.getBookmarks()) || [];
+    console.log(BookmarksStore.state.bookmarks);
+    this.initBookmarks();
+  }
+  async loadDirectories() {
+    const directoryService = new DirectoryService();
+    DirectoryStore.state.directories = (await directoryService.getDirectories()) || [];
+    this.initDirectories();
   }
 }
 </script>

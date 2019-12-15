@@ -1,3 +1,5 @@
+import { DirectoryStore } from './directory-store';
+import { BookmarksStore } from './bookmarks-store';
 import { MarksStore } from './marks-store';
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -12,6 +14,8 @@ export default new Vuex.Store({
     auth: AuthStore,
     navigation: NavigationStore,
     marks: MarksStore,
-    tags: TagsStore
+    tags: TagsStore,
+    bookmarks: BookmarksStore,
+    directories: DirectoryStore
   }
 });
