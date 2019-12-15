@@ -220,7 +220,7 @@ export default class MarkOverview extends Vue {
   color: white;
   display: flex;
   justify-content: left;
-  z-index: 9999 !important;
+  z-index: 9998 !important;
   .back-icon {
     margin: auto 10px;
     cursor: pointer;

@@ -76,18 +76,12 @@ export default class NavBar extends Vue {
 <style scoped lang="scss">
 @import './../variables.scss';
 
-.burger-menu {
-  position: fixed;
-  left: 10px;
-  top: 15px;
-  z-index: 9999 !important;
-}
-
-.close-menu {
+.burger-menu, .close-menu {
   position: fixed;
   right: 10px;
-  top: 15px;
+  top: 10px;
   z-index: 9999 !important;
+  color: $secondary-color;
 }
 
 .nav-bar {
