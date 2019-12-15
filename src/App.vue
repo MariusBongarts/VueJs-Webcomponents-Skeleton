@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="{ loading: !marksLoaded }">
+  <div id="app" :class="{ loading: !loaded }">
     <div v-if="loggedIn">
       <NavBar />
     </div>
@@ -7,13 +7,13 @@
     <div
       v-if="loggedIn"
       class="main-container"
-      :class="{ loading: !marksLoaded }"
+      :class="{ loading: !loaded }"
     >
-      <div v-if="!marksLoaded" class="loading">
+      <div v-if="!loaded" class="loading">
         <LoadingSpinner />
       </div>
       <BlurIn>
-        <router-view v-if="marksLoaded" />
+        <router-view v-if="loaded" />
       </BlurIn>
     </div>
 
@@ -44,33 +44,46 @@ import { TagsStore } from './store/tags-store';
 })
 export default class App extends Vue {
   loggedIn = false;
-  marksLoaded = false;
+  loaded = false;
   @Mutation initMarks!: () => void;
   @Mutation initTags!: () => void;
 
   async mounted() {
     this.loggedIn = !!AuthStore.state.jwt;
-    this.$store.subscribe(() => {
-      this.loggedIn = !!AuthStore.state.jwt;
+    this.$store.subscribe(async () => {
+
+      // Load data if user logged in
+      const loggedIn = !!AuthStore.state.jwt;
+      if (loggedIn && !this.loggedIn) {
+        this.loggedIn = loggedIn;
+        await this.loadInitialData();
+      }
+      this.loggedIn = loggedIn;
+
     });
-    this.loadInitialData();
+    await this.loadInitialData();
   }
 
-  // We don´t need to wait for this. It can be loaded asynchronously
-  loadInitialData() {
-    this.loadMarks();
+  async loadInitialData() {
+    this.loaded = false;
+    await this.loadMarks();
+
+    // We don´t need to wait for the tags, they will be loaded asynchronously (Otherwise loading spinner takes too much time)
     this.loadTags();
+
+    this.loaded = true;
   }
 
   async loadMarks() {
     const markService = new MarkerService();
     MarksStore.state.marks = (await markService.getMarks()) || [];
-    this.marksLoaded = true;
+    this.loaded = true;
     this.initMarks();
   }
   async loadTags() {
     const tagsService = new TagsService();
     TagsStore.state.tags = (await tagsService.getTags()) || [];
+    console.log(TagsStore.state.tags);
     this.initTags();
   }
 }

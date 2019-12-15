@@ -116,7 +116,6 @@ export default class MarkOverview extends Vue {
   listenForState() {
     this.$store.subscribe(state => {
       if (MarksStore.state.marks.length !== this.marks.length) {
-        console.log(MarksStore.state.marks);
         this.loadMarks();
       }
     });

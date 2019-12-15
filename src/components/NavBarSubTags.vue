@@ -42,6 +42,7 @@ export default class NavBarSubTags extends Vue {
 
   listenForState() {
     this.$store.subscribe(state => {
+      console.log(TagsStore.state.tags);
       this.loadTags();
     });
   }
