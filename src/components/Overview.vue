@@ -92,7 +92,10 @@ export default class Overview extends Vue {
   }
 
   getMarksForBookmark(bookmark: Bookmark) {
-    const marks = MarksStore.state.marks.filter(mark => mark.url === bookmark.url);
+    const marks = MarksStore.state.marks.filter(mark =>
+    mark.url === bookmark.url &&
+    (!this.selectedTag || mark.tags.includes(this.selectedTag.name))
+    );
     return marks;
   }
 
@@ -140,10 +143,12 @@ export default class Overview extends Vue {
     // TODO: Take mark tags also into account
     if (this.selectedTag) {
       bookmarks = bookmarks.filter(
-        bookmarks =>
-          bookmarks.tags &&
-          bookmarks.tags.length &&
-          bookmarks.tags.includes(this.selectedTag!.name)
+        bookmark =>
+          (bookmark.tags &&
+          bookmark.tags.length &&
+          bookmark.tags.includes(this.selectedTag!.name)) ||
+          this.getMarksForBookmark(bookmark).some(mark =>
+          mark.tags.includes(this.selectedTag!.name))
       );
     }
 
