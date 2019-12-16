@@ -23,25 +23,7 @@ import { Route } from 'vue-router';
     Overview
   }
 })
-export default class Home extends Vue {
-  userService = new UserService();
-  @Mutation emitLogout!: () => void;
-  show = true;
-  marks: Mark[] = [];
-
-  async mounted() {
-    this.listenForState();
-    this.marks = MarksStore.state.marks;
-  }
-
-  listenForState() {
-    this.$store.subscribe(state => {
-      if (MarksStore.state.marks !== this.marks) {
-        this.marks = MarksStore.state.marks;
-      }
-    });
-  }
-}
+export default class Home extends Vue {}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

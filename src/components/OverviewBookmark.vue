@@ -48,14 +48,8 @@ import { BookmarksStore } from '../store/bookmarks-store';
 })
 export default class OverviewBookmark extends Vue {
   @Prop() bookmark!: Bookmark;
-  marks: Mark[] = [];
+  @Prop() marks!: Mark[];
   @Mutation initMarks!: () => void;
-
-  mounted() {
-    this.marks = MarksStore.state.marks.filter(
-      mark => mark.url === this.bookmark.url
-    );
-  }
 
   getTimestamp(createdAt: number) {
     return timeSinceTimestamp(createdAt);

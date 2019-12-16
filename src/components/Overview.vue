@@ -9,6 +9,7 @@
       v-for="(bookmark, index) in bookmarks"
       :key="index"
       :bookmark="bookmark"
+      :marks="getMarksForBookmark(bookmark)"
     />
 
   </div>
@@ -90,6 +91,11 @@ export default class Overview extends Vue {
     await this.loadBookmarks();
   }
 
+  getMarksForBookmark(bookmark: Bookmark) {
+    const marks = MarksStore.state.marks.filter(mark => mark.url === bookmark.url);
+    return marks;
+  }
+
   getTimestamp(createdAt: number) {
     return timeSinceTimestamp(createdAt);
   }
@@ -117,7 +123,6 @@ export default class Overview extends Vue {
 
   loadBookmarks() {
     this.bookmarks = this.getSortedBookmarks();
-    console.log(this.bookmarks);
   }
 
   // Newest mark should be first
