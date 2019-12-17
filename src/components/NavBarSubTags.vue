@@ -3,8 +3,7 @@
     <div>
       <SearchBarFilter @input="e => applyFilter(e)" />
     </div>
-    <div class="nav-tags">
-
+    <div ref="container" class="nav-tags">
       <!-- Show directory of selected Tag, when exists -->
       <div
         class="tags"
@@ -22,12 +21,11 @@
 
       <!-- Show related Tags -->
       <NavBarSubTagsItem
-        v-for="(tagBadge, index) in tagsBadges"
+        v-for="(tagBadge, index) in getInfiniteScrollTags()"
         :key="index"
         :tag="tagBadge.tag"
         :badge="tagBadge.badgeValue"
       />
-
     </div>
   </div>
 </template>
@@ -55,12 +53,29 @@ export default class NavBarSubTags extends Vue {
   tags: Tag[] = [];
   tagsBadges: Array<{ tag: Tag; badgeValue: number }> = [];
   filter = '';
-  selectedTag: Tag | undefined;
+  selectedTag: Tag | undefined | null = null;
+  pagination = 50;
 
   mounted() {
     this.getSelectedTag();
     this.loadTags();
     this.listenForState();
+    this.listenForScrolling();
+  }
+
+  getInfiniteScrollTags() {
+    return this.tagsBadges.slice(0, this.pagination);
+  }
+
+  // InfiniteScolling: When user scrolled to bottom 20 more items will be reloaded
+  listenForScrolling() {
+    const container = this.$refs.container as HTMLElement;
+    container.addEventListener('scroll', (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+        this.pagination = this.pagination + 50;
+      }
+    });
   }
 
   listenForState() {
@@ -150,13 +165,13 @@ export default class NavBarSubTags extends Vue {
     return this.tags
       .filter(tag => relatedTags.some(tagString => tagString === tag.name))
       .filter(tagTmp => tagTmp.name !== tag.name)
-      .filter(tag => tag.name.toLowerCase().includes(this.filter.toLowerCase()))
-      ;
+      .filter(tag =>
+        tag.name.toLowerCase().includes(this.filter.toLowerCase())
+      );
   }
 
   getBadgeValue(tag: Tag) {
-    return MarksStore.state.marks.filter(mark =>
-    mark.tags.includes(tag.name))
+    return MarksStore.state.marks.filter(mark => mark.tags.includes(tag.name))
       .length;
   }
 

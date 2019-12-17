@@ -1,5 +1,5 @@
 <template>
-  <div class="overview" :v-if="bookmarks.length">
+  <div class="overview" ref="overview" :v-if="bookmarks.length">
     <SlideInFromTop>
       <div class="selected-header" v-if="getHeader()">
         <ArrowLeftIcon @click="navigateBack()" class="icon back-icon" />
@@ -9,7 +9,7 @@
     </SlideInFromTop>
 
     <OverviewBookmark
-      v-for="(bookmark, index) in bookmarks"
+      v-for="(bookmark, index) in getInfiniteScrollBookmarks()"
       :key="index"
       :bookmark="bookmark"
       :marks="getMarksForBookmark(bookmark)"
@@ -66,10 +66,29 @@ export default class Overview extends Vue {
   selectedBookmark!: Bookmark | undefined;
   selectedDirectory!: Directory | undefined;
 
+  pagination = 20;
+
   async mounted() {
     this.onUrlChange(this.$route);
     this.loadBookmarks();
     this.listenForState();
+    this.listenForScrolling();
+  }
+
+  // InfiniteScolling: When user scrolled to bottom 20 more items will be reloaded
+  listenForScrolling() {
+    this.scrollToTop();
+    const container = this.$refs.overview as HTMLElement;
+    container.parentElement!.addEventListener('scroll', (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+        this.pagination = this.pagination + 20;
+      }
+    });
+  }
+
+  getInfiniteScrollBookmarks() {
+    return this.bookmarks.slice(0, this.pagination);
   }
 
   async navigateBack() {
@@ -77,9 +96,16 @@ export default class Overview extends Vue {
     await this.$router.push({ name: currentRoute });
   }
 
+  scrollToTop() {
+    this.pagination = 20;
+    const container = this.$refs.overview as HTMLElement;
+    container.parentElement!.scrollTo(0, 0);
+  }
+
   // If there is an id in the path it will be shown. Otherwise all marks
   @Watch('$route')
   async onUrlChange(route: Route) {
+    this.scrollToTop();
     this.selectedId = this.$route.params.id || '';
     this.selectedTag = undefined;
     this.selectedOrigin = '';
