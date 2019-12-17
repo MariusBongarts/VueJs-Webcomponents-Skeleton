@@ -1,27 +1,27 @@
 <template>
-  <div class="tag-item" @click="navigateToTag()">
-    <span>{{ tag.name }}</span>
+  <div class="directory-item" @click="navigateToTag()">
+    <span>{{ directory.name }}</span>
     <i class="logo-badge">{{ badge }}</i>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Tag } from '../models/tag';
-import { TagsStore } from '../store/tags-store';
+import { Directory } from '../models/directory';
+import { DirectoryStore } from '../store/directory-store';
 import { Mutation } from 'vuex-class';
 
 @Component({
   components: {}
 })
-export default class NavBarSubTagsItem extends Vue {
-  @Prop() tag!: Tag;
+export default class NavBarSubDirectoryItem extends Vue {
+  @Prop() directory!: Directory;
   @Prop() badge!: number;
   @Mutation closeSubMenu!: () => void;
 
   async navigateToTag() {
     try {
-      await this.$router.push('/tags/' + this.tag._id);
+      await this.$router.push('/directories/' + this.directory._id);
 
       // Close sub menu only in mobile mode
       if (screen.width < 900) this.closeSubMenu();
@@ -35,7 +35,7 @@ export default class NavBarSubTagsItem extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import './../variables.scss';
-.tag-item {
+.directory-item {
   background-color: $secondary-color;
   display: flex;
   flex-wrap: wrap;
@@ -50,11 +50,11 @@ export default class NavBarSubTagsItem extends Vue {
   border-radius: 10px;
 }
 
-.tag-item:hover {
+.directory-item:hover {
   background-color: darken($color: $secondary-color, $amount: 3);
 }
 
-.tag-item span {
+.directory-item span {
   padding: 3px;
   margin: 2px;
 }
@@ -73,7 +73,7 @@ export default class NavBarSubTagsItem extends Vue {
 }
 
 @media (max-width: 900px) {
-  .tag-item {
+  .directory-item {
     margin-right: 5px;
     font-size: 1.2em;
     padding-top: 2px;

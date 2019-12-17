@@ -1,11 +1,11 @@
 <template>
   <div class="overview" :v-if="bookmarks.length">
-    <SlideInFromRight>
-      <div class="selected-header" v-if="selectedId || selectedOrigin">
+    <SlideInFromTop>
+      <div class="selected-header" v-if="getHeader()">
         <ArrowLeftIcon @click="navigateBack()" class="back-icon" />
         <span>{{ getHeader() }} </span>
       </div>
-    </SlideInFromRight>
+    </SlideInFromTop>
 
     <OverviewBookmark
       v-for="(bookmark, index) in bookmarks"
@@ -25,7 +25,7 @@ import { Route } from 'vue-router';
 import OverviewBookmark from './../components/OverviewBookmark.vue';
 import ArrowLeftIcon from './../components/Icons/ArrowLeftIcon.vue';
 import BlurIn from './../components/animations/BlurIn.vue';
-import SlideInFromRight from './../components/animations/SlideInFromRight.vue';
+import SlideInFromTop from './../components/animations/SlideInFromTop.vue';
 import SlideInFromTopGroup from './../components/animations/SlideInFromTopGroup.vue';
 import { Mark } from '../models/mark';
 import { MarksStore } from './../store/marks-store';
@@ -35,13 +35,15 @@ import { TagsStore } from '../store/tags-store';
 import { Tag } from '../models/tag';
 import { Bookmark } from '../models/bookmark';
 import { BookmarksStore } from '../store/bookmarks-store';
+import { Directory } from '../models/directory';
+import { DirectoryStore } from '../store/directory-store';
 
 @Component({
   components: {
     BlurIn,
     ArrowLeftIcon,
     OverviewBookmark,
-    SlideInFromRight,
+    SlideInFromTop,
     SlideInFromTopGroup
   }
 })
@@ -55,6 +57,7 @@ export default class Overview extends Vue {
   selectedTag!: Tag | undefined;
   selectedOrigin: string = '';
   selectedBookmark!: Bookmark | undefined;
+  selectedDirectory!: Directory | undefined;
 
   async mounted() {
     this.onUrlChange(this.$route);
@@ -64,7 +67,7 @@ export default class Overview extends Vue {
 
   async navigateBack() {
     const currentRoute = this.$route.name!.split('-')[0] || '';
-    await this.$router.push({ name: currentRoute});
+    await this.$router.push({ name: currentRoute });
   }
 
   // If there is an id in the path it will be shown. Otherwise all marks
@@ -74,12 +77,20 @@ export default class Overview extends Vue {
     this.selectedTag = undefined;
     this.selectedOrigin = '';
     this.selectedBookmark = undefined;
+    this.selectedDirectory = undefined;
 
     if (route.name!.startsWith('tags') && this.$route.params.id) {
       this.selectedTag = TagsStore.state.tags.find(
         tag => tag._id === this.selectedId
       );
     }
+
+    if (route.name!.startsWith('directories') && this.$route.params.id) {
+      this.selectedDirectory = DirectoryStore.state.directories.find(
+        directory => directory._id === this.$route.params.id
+      );
+    }
+
     if (route.name!.startsWith('bookmarks') && this.$route.params.origin) {
       this.selectedOrigin = this.$route.params.origin;
     }
@@ -115,6 +126,9 @@ export default class Overview extends Vue {
     }
     if (this.selectedOrigin) {
       return this.selectedOrigin;
+    }
+    if (this.selectedDirectory) {
+      return this.selectedDirectory.name;
     }
     return '';
   }
@@ -166,6 +180,32 @@ export default class Overview extends Vue {
         bookmark => bookmark._id === this.selectedBookmark!._id
       );
     }
+
+    // Get all bookmarks where a tag exists, which is in current directory
+    if (this.selectedDirectory) {
+
+      let tmp: Bookmark[] = [];
+      const tags = TagsStore.state.tags.filter(
+        tag => tag._directory && tag._directory === this.selectedDirectory!._id
+      );
+
+      for (const tag of tags) {
+        tmp = [
+          ...bookmarks.filter(
+            bookmark =>
+              (bookmark.tags &&
+                bookmark.tags.length &&
+                bookmark.tags.includes(tag.name)) ||
+              this.getMarksForBookmark(bookmark).some(mark =>
+                mark.tags.includes(tag.name)
+              )
+          ),
+          ...tmp
+        ];
+      }
+      bookmarks = tmp;
+    }
+
     return bookmarks;
   }
 }
