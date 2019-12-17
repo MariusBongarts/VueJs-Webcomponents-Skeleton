@@ -1,9 +1,11 @@
 <template>
   <div class="overview" :v-if="bookmarks.length">
-    <div class="selected-header" v-if="selectedId || selectedOrigin">
-      <ArrowLeftIcon @click="navigateBack()" class="back-icon" />
-      <span>{{ getHeader() }} </span>
-    </div>
+    <SlideInFromRight>
+      <div class="selected-header" v-if="selectedId || selectedOrigin">
+        <ArrowLeftIcon @click="navigateBack()" class="back-icon" />
+        <span>{{ getHeader() }} </span>
+      </div>
+    </SlideInFromRight>
 
     <OverviewBookmark
       v-for="(bookmark, index) in bookmarks"
@@ -11,7 +13,6 @@
       :bookmark="bookmark"
       :marks="getMarksForBookmark(bookmark)"
     />
-
   </div>
 </template>
 
@@ -24,6 +25,8 @@ import { Route } from 'vue-router';
 import OverviewBookmark from './../components/OverviewBookmark.vue';
 import ArrowLeftIcon from './../components/Icons/ArrowLeftIcon.vue';
 import BlurIn from './../components/animations/BlurIn.vue';
+import SlideInFromRight from './../components/animations/SlideInFromRight.vue';
+import SlideInFromTopGroup from './../components/animations/SlideInFromTopGroup.vue';
 import { Mark } from '../models/mark';
 import { MarksStore } from './../store/marks-store';
 import { MarkerService } from './../services/marker.service';
@@ -37,7 +40,9 @@ import { BookmarksStore } from '../store/bookmarks-store';
   components: {
     BlurIn,
     ArrowLeftIcon,
-    OverviewBookmark
+    OverviewBookmark,
+    SlideInFromRight,
+    SlideInFromTopGroup
   }
 })
 export default class Overview extends Vue {
@@ -57,13 +62,9 @@ export default class Overview extends Vue {
     this.listenForState();
   }
 
-  navigateBack() {
-    const currentRoute = this.$route.name || '';
-    if (this.selectedBookmark) {
-      this.$router.push({ name: 'bookmarks-origin' });
-    } else {
-      this.$router.push({ name: 'bookmarks' });
-    }
+  async navigateBack() {
+    const currentRoute = this.$route.name!.split('-')[0] || '';
+    await this.$router.push({ name: currentRoute});
   }
 
   // If there is an id in the path it will be shown. Otherwise all marks
@@ -93,9 +94,10 @@ export default class Overview extends Vue {
   }
 
   getMarksForBookmark(bookmark: Bookmark) {
-    const marks = MarksStore.state.marks.filter(mark =>
-    mark.url === bookmark.url &&
-    (!this.selectedTag || mark.tags.includes(this.selectedTag.name))
+    const marks = MarksStore.state.marks.filter(
+      mark =>
+        mark.url === bookmark.url &&
+        (!this.selectedTag || mark.tags.includes(this.selectedTag.name))
     );
     return marks;
   }
@@ -145,16 +147,17 @@ export default class Overview extends Vue {
       bookmarks = bookmarks.filter(
         bookmark =>
           (bookmark.tags &&
-          bookmark.tags.length &&
-          bookmark.tags.includes(this.selectedTag!.name)) ||
+            bookmark.tags.length &&
+            bookmark.tags.includes(this.selectedTag!.name)) ||
           this.getMarksForBookmark(bookmark).some(mark =>
-          mark.tags.includes(this.selectedTag!.name))
+            mark.tags.includes(this.selectedTag!.name)
+          )
       );
     }
 
     if (this.selectedOrigin && !this.selectedBookmark) {
       bookmarks = bookmarks.filter(bookmarks =>
-        bookmarks.url.includes(this.selectedOrigin)
+        bookmarks.url.split('/')[2].startsWith(this.selectedOrigin)
       );
     }
 

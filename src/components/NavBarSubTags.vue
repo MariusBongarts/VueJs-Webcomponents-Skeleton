@@ -15,12 +15,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { Tag } from '../models/tag';
 import { TagsStore } from '../store/tags-store';
 import NavBarSubTagsItem from './../components/NavBarSubTagsItem.vue';
 import { MarksStore } from '../store/marks-store';
 import SearchBarFilter from './../components/SearchBarFilter.vue';
+import { BookmarksStore } from '../store/bookmarks-store';
 
 @Component({
   name: 'NavBarSub-tags',
@@ -33,11 +34,28 @@ export default class NavBarSubTags extends Vue {
   tags: Tag[] = [];
   tagsBadges: Array<{ tag: Tag; badgeValue: number }> = [];
   filter = '';
+  selectedTag: Tag | undefined;
 
   mounted() {
     this.tags = TagsStore.state.tags;
+    this.getSelectedTag();
     this.loadTags();
     this.listenForState();
+  }
+
+  @Watch('$route')
+  async onUrlChange() {
+    this.getSelectedTag();
+    this.loadTags();
+  }
+
+  getSelectedTag() {
+    this.selectedTag = undefined;
+    if (this.$route.name!.startsWith('tags') && this.$route.params.id) {
+      this.selectedTag = TagsStore.state.tags.find(
+        tag => tag._id === this.$route.params.id
+      );
+    }
   }
 
   listenForState() {
@@ -60,9 +78,35 @@ export default class NavBarSubTags extends Vue {
   }
 
   filterTags() {
-    this.tags = TagsStore.state.tags.filter(tag =>
-      tag.name.toLowerCase().includes(this.filter.toLowerCase())
+    if (this.selectedTag) {
+      this.tags = this.getRelatedTags(this.selectedTag);
+    } else {
+      this.tags = TagsStore.state.tags.filter(tag =>
+        tag.name.toLowerCase().includes(this.filter.toLowerCase())
+      );
+    }
+  }
+
+  // Load all related tags for the selected one to suggest other tags to user
+  getRelatedTags(tag: Tag) {
+    let relatedTags: string[] = [];
+    MarksStore.state.marks
+      .filter(mark => mark.tags.includes(tag.name))
+      .forEach(mark => (relatedTags = [...relatedTags, ...mark.tags]));
+    BookmarksStore.state.bookmarks
+      .filter(bookmark => bookmark.tags.includes(tag.name))
+      .forEach(bookmark => (relatedTags = [...relatedTags, ...bookmark.tags]));
+    let tags = [...new Set(relatedTags)].filter(
+      tag => tag !== tag
     );
+    tags = tags.filter(
+      tag =>
+        MarksStore.state.marks.filter(mark => mark.tags.includes(tag)).length > 0 ||
+        BookmarksStore.state.bookmarks.filter(bookmark => bookmark.tags.includes(tag)).length >
+          0
+    );
+    return TagsStore.state.tags.filter(tag =>
+    relatedTags.some(tagString => tagString === tag.name)).filter(tagTmp => tagTmp.name !== tag.name);
   }
 
   getBadgeValue(tag: Tag) {

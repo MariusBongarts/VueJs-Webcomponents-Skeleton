@@ -76,7 +76,7 @@ export default class NavBarSubBookmarks extends Vue {
 
   getBookMarkBadgeForOrigin(origin: string) {
     return this.bookmarksBadges.filter(bookmarkBadge =>
-      bookmarkBadge.bookmark.url.includes(origin)
+      bookmarkBadge.bookmark.url.split('/')[2].startsWith((origin))
     );
   }
 

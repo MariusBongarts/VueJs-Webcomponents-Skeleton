@@ -1,24 +1,24 @@
 <template>
-  <div class="mark-overview">
-    <div class="header">
-      <h4>{{ bookmark.title }}</h4>
+    <div class="mark-overview">
+      <div class="header">
+        <h4>{{ bookmark.title }}</h4>
+      </div>
+      <OverviewMarkElement
+        class="mark-element"
+        v-for="(mark, index) in marks"
+        :key="index"
+        :mark="mark"
+      >
+      </OverviewMarkElement>
+      <div class="header">
+        <h5>
+          {{ getTimestamp(bookmark.createdAt) }} -
+          <a :data-tooltip="bookmark.url" target="_blank" :href="bookmark.url">
+            {{ bookmark.url.split('/')[2] }}</a
+          >
+        </h5>
+      </div>
     </div>
-    <OverviewMarkElement
-      class="mark-element"
-      v-for="(mark, index) in marks"
-      :key="index"
-      :mark="mark"
-    >
-    </OverviewMarkElement>
-    <div class="header">
-      <h5>
-        {{ getTimestamp(bookmark.createdAt) }} -
-        <a :data-tooltip="bookmark.url" target="_blank" :href="bookmark.url">
-          {{ bookmark.url.split('/')[2] }}</a
-        >
-      </h5>
-    </div>
-  </div>
 </template>
 
 <script lang="ts">
@@ -30,6 +30,7 @@ import { Route } from 'vue-router';
 import OverviewMarkElement from './../components/OverviewMarkElement.vue';
 import ArrowLeftIcon from './../components/Icons/ArrowLeftIcon.vue';
 import BlurIn from './../components/animations/BlurIn.vue';
+import SlideInFromRight from './../components/animations/SlideInFromRight.vue';
 import { Mark } from '../models/mark';
 import { MarksStore } from './../store/marks-store';
 import { MarkerService } from './../services/marker.service';
@@ -43,7 +44,8 @@ import { BookmarksStore } from '../store/bookmarks-store';
   components: {
     OverviewMarkElement,
     BlurIn,
-    ArrowLeftIcon
+    ArrowLeftIcon,
+    SlideInFromRight
   }
 })
 export default class OverviewBookmark extends Vue {
