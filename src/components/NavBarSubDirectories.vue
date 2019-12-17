@@ -10,6 +10,13 @@
         :directory="directoryBadge.directory"
         :badge="directoryBadge.badgeValue"
       />
+      <div class="tags" v-if="selectedDirectory && getTagsForDirectory().length">
+        <NavBarSubTagsItem
+          v-for="(tag, index) in getTagsForDirectory()"
+          :key="index"
+          :tag="tag"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -19,53 +26,57 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { Directory } from '../models/directory';
 import { DirectoryStore } from '../store/directory-store';
 import NavBarSubDirectoryItem from './../components/NavBarSubDirectoryItem.vue';
+import NavBarSubTagsItem from './../components/NavBarSubTagsItem.vue';
 import { MarksStore } from '../store/marks-store';
 import SearchBarFilter from './../components/SearchBarFilter.vue';
 import { BookmarksStore } from '../store/bookmarks-store';
+import { TagsStore } from '../store/tags-store';
 
 @Component({
   name: 'NavBarSub-directories',
   components: {
     NavBarSubDirectoryItem,
-    SearchBarFilter
+    SearchBarFilter,
+    NavBarSubTagsItem
   }
 })
 export default class NavBarSubDirectories extends Vue {
   directories: Directory[] = [];
   directoriesBadges: Array<{ directory: Directory; badgeValue: number }> = [];
   filter = '';
-  selectedDirectory: Directory | undefined;
+  selectedDirectory: Directory | null = null;
 
   mounted() {
     this.directories = DirectoryStore.state.directories;
     this.getSelectedDirectory();
-    this.loadDirectorys();
+    this.loadDirectories();
     this.listenForState();
   }
 
   @Watch('$route')
   async onUrlChange() {
     this.getSelectedDirectory();
-    this.loadDirectorys();
+    this.loadDirectories();
   }
 
   getSelectedDirectory() {
-    this.selectedDirectory = undefined;
+    this.selectedDirectory = null;
     if (this.$route.name!.startsWith('directories') && this.$route.params.id) {
-      this.selectedDirectory = DirectoryStore.state.directories.find(
-        directory => directory._id === this.$route.params.id
-      );
+      this.selectedDirectory =
+        DirectoryStore.state.directories.find(
+          directory => directory._id === this.$route.params.id
+        ) || null;
     }
   }
 
   listenForState() {
     this.$store.subscribe(state => {
-      this.loadDirectorys();
+      this.loadDirectories();
     });
   }
 
-  loadDirectorys() {
-    this.filterDirectorys();
+  loadDirectories() {
+    this.filterDirectories();
     this.directoriesBadges = this.directories.map(directory => {
       return {
         directory,
@@ -77,7 +88,7 @@ export default class NavBarSubDirectories extends Vue {
     );
   }
 
-  filterDirectorys() {
+  filterDirectories() {
     if (this.selectedDirectory) {
       this.directories = this.getSubDirectories(this.selectedDirectory);
     } else {
@@ -88,19 +99,37 @@ export default class NavBarSubDirectories extends Vue {
   }
 
   getSubDirectories(directory: Directory) {
-    return DirectoryStore.state.directories.filter(directoryTmp =>
-    directoryTmp._parentDirectory && directoryTmp._parentDirectory === directory._id);
+    return DirectoryStore.state.directories.filter(
+      directoryTmp =>
+        directoryTmp._parentDirectory &&
+        directoryTmp._parentDirectory === directory._id &&
+        directoryTmp.name.toLowerCase().includes(this.filter.toLowerCase())
+    );
+  }
+
+  getTagsForDirectory(directory?: Directory) {
+    if (!directory) directory = this.selectedDirectory!;
+    if (directory) {
+      return TagsStore.state.tags.filter(
+        tag =>
+        tag._directory === directory!._id &&
+        tag.name.toLowerCase().includes(this.filter.toLowerCase())
+      );
+    } else {
+      return [];
+    }
   }
 
   getBadgeValue(directory: Directory) {
-    return MarksStore.state.marks.filter(mark => mark.tags.includes(directory.name))
-      .length;
+    return MarksStore.state.marks.filter(mark =>
+      mark.tags.includes(directory.name)
+    ).length;
   }
 
   // Filter got from SearchBar to filter directories
   applyFilter(filter: string) {
     this.filter = filter;
-    this.loadDirectorys();
+    this.loadDirectories();
   }
 }
 </script>

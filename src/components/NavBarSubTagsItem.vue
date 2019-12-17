@@ -1,7 +1,10 @@
 <template>
   <div class="tag-item" @click="navigateToTag()">
-    <span>{{ tag.name }}</span>
-    <i class="logo-badge">{{ badge }}</i>
+    <span>
+      <TagIcon />
+      {{ tag.name }}</span
+    >
+    <i v-if="badge" class="logo-badge">{{ badge }}</i>
   </div>
 </template>
 
@@ -10,9 +13,12 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Tag } from '../models/tag';
 import { TagsStore } from '../store/tags-store';
 import { Mutation } from 'vuex-class';
+import TagIcon from './../components/Icons/TagIcon.vue';
 
 @Component({
-  components: {}
+  components: {
+    TagIcon
+  }
 })
 export default class NavBarSubTagsItem extends Vue {
   @Prop() tag!: Tag;
@@ -79,5 +85,9 @@ export default class NavBarSubTagsItem extends Vue {
     padding-top: 2px;
     padding-bottom: 2px;
   }
+}
+
+svg {
+  height: 20px;
 }
 </style>

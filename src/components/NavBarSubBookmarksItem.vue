@@ -1,6 +1,9 @@
 <template>
   <div class="bookmark-item" @click="navigateToBookmark()">
-    <span>{{ bookmark.title }}</span>
+    <span>
+      <BookmarkIcon />
+      {{ bookmark.title }}</span
+    >
     <i class="logo-badge">{{ badge }}</i>
   </div>
 </template>
@@ -11,9 +14,12 @@ import { Bookmark } from '../models/bookmark';
 import { BookmarksStore } from '../store/bookmarks-store';
 import { MarksStore } from '../store/marks-store';
 import { Mutation } from 'vuex-class';
+import BookmarkIcon from './../components/Icons/BookmarkIcon.vue';
 
 @Component({
-  components: {}
+  components: {
+    BookmarkIcon
+  }
 })
 export default class NavBarSubBookmarksItem extends Vue {
   @Prop() bookmark!: Bookmark;
@@ -22,7 +28,9 @@ export default class NavBarSubBookmarksItem extends Vue {
 
   async navigateToBookmark() {
     try {
-      await this.$router.push(`/bookmarks/${this.bookmark.url.split('/')[2]}/${this.bookmark._id}`);
+      await this.$router.push(
+        `/bookmarks/${this.bookmark.url.split('/')[2]}/${this.bookmark._id}`
+      );
 
       // Close sub menu only in mobile mode
       if (screen.width < 900) this.closeSubMenu();
@@ -81,5 +89,9 @@ export default class NavBarSubBookmarksItem extends Vue {
     padding-top: 2px;
     padding-bottom: 2px;
   }
+}
+
+svg {
+  height: 20px;
 }
 </style>

@@ -2,8 +2,9 @@
   <div class="overview" :v-if="bookmarks.length">
     <SlideInFromTop>
       <div class="selected-header" v-if="getHeader()">
-        <ArrowLeftIcon @click="navigateBack()" class="back-icon" />
+        <ArrowLeftIcon @click="navigateBack()" class="icon back-icon" />
         <span>{{ getHeader() }} </span>
+        <component v-if="getIcon()" :is="getIcon()" class="icon" />
       </div>
     </SlideInFromTop>
 
@@ -37,6 +38,9 @@ import { Bookmark } from '../models/bookmark';
 import { BookmarksStore } from '../store/bookmarks-store';
 import { Directory } from '../models/directory';
 import { DirectoryStore } from '../store/directory-store';
+import FolderIcon from './../components/Icons/FolderIcon.vue';
+import TagIcon from './../components/Icons/TagIcon.vue';
+import BookmarkIcon from './../components/Icons/BookmarkIcon.vue';
 
 @Component({
   components: {
@@ -44,7 +48,10 @@ import { DirectoryStore } from '../store/directory-store';
     ArrowLeftIcon,
     OverviewBookmark,
     SlideInFromTop,
-    SlideInFromTopGroup
+    SlideInFromTopGroup,
+    FolderIcon,
+    TagIcon,
+    BookmarkIcon
   }
 })
 export default class Overview extends Vue {
@@ -133,6 +140,19 @@ export default class Overview extends Vue {
     return '';
   }
 
+  getIcon() {
+    if (this.selectedTag) {
+      return 'tag-icon';
+    }
+    if (this.selectedDirectory) {
+      return 'folder-icon';
+    }
+    if (this.selectedBookmark) {
+      return 'bookmark-icon';
+    }
+    return '';
+  }
+
   listenForState() {
     this.$store.subscribe(state => {
       if (BookmarksStore.state.bookmarks.length !== this.bookmarks.length) {
@@ -183,7 +203,6 @@ export default class Overview extends Vue {
 
     // Get all bookmarks where a tag exists, which is in current directory
     if (this.selectedDirectory) {
-
       let tmp: Bookmark[] = [];
       const tags = TagsStore.state.tags.filter(
         tag => tag._directory && tag._directory === this.selectedDirectory!._id
@@ -224,8 +243,10 @@ export default class Overview extends Vue {
   display: flex;
   justify-content: left;
   z-index: 9998 !important;
-  .back-icon {
+  .icon {
     margin: auto 10px;
+  }
+  .back-icon {
     cursor: pointer;
   }
 

@@ -1,7 +1,10 @@
 <template>
   <div class="directory-item" @click="navigateToTag()">
-    <span>{{ directory.name }}</span>
-    <i class="logo-badge">{{ badge }}</i>
+    <span>
+      <FolderIcon />
+      {{ directory.name }}</span
+    >
+    <i v-if="badge" class="logo-badge">{{ badge }}</i>
   </div>
 </template>
 
@@ -10,9 +13,12 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Directory } from '../models/directory';
 import { DirectoryStore } from '../store/directory-store';
 import { Mutation } from 'vuex-class';
+import FolderIcon from './../components/Icons/FolderIcon.vue';
 
 @Component({
-  components: {}
+  components: {
+    FolderIcon
+  }
 })
 export default class NavBarSubDirectoryItem extends Vue {
   @Prop() directory!: Directory;
@@ -79,5 +85,9 @@ export default class NavBarSubDirectoryItem extends Vue {
     padding-top: 2px;
     padding-bottom: 2px;
   }
+}
+
+svg {
+  height: 20px;
 }
 </style>

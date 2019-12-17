@@ -4,12 +4,30 @@
       <SearchBarFilter @input="e => applyFilter(e)" />
     </div>
     <div class="nav-tags">
+
+      <!-- Show directory of selected Tag, when exists -->
+      <div
+        class="tags"
+        v-if="
+          selectedTag &&
+            selectedTag._directory &&
+            getDirectoryForTag(selectedTag)
+        "
+      >
+        <NavBarSubDirectoryItem
+          :key="index"
+          :directory="getDirectoryForTag(selectedTag)"
+        />
+      </div>
+
+      <!-- Show related Tags -->
       <NavBarSubTagsItem
         v-for="(tagBadge, index) in tagsBadges"
         :key="index"
         :tag="tagBadge.tag"
         :badge="tagBadge.badgeValue"
       />
+
     </div>
   </div>
 </template>
@@ -19,15 +37,18 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { Tag } from '../models/tag';
 import { TagsStore } from '../store/tags-store';
 import NavBarSubTagsItem from './../components/NavBarSubTagsItem.vue';
+import NavBarSubDirectoryItem from './../components/NavBarSubDirectoryItem.vue';
 import { MarksStore } from '../store/marks-store';
 import SearchBarFilter from './../components/SearchBarFilter.vue';
 import { BookmarksStore } from '../store/bookmarks-store';
+import { DirectoryStore } from '../store/directory-store';
 
 @Component({
   name: 'NavBarSub-tags',
   components: {
     NavBarSubTagsItem,
-    SearchBarFilter
+    SearchBarFilter,
+    NavBarSubDirectoryItem
   }
 })
 export default class NavBarSubTags extends Vue {
@@ -37,10 +58,15 @@ export default class NavBarSubTags extends Vue {
   selectedTag: Tag | undefined;
 
   mounted() {
-    this.tags = TagsStore.state.tags;
     this.getSelectedTag();
     this.loadTags();
     this.listenForState();
+  }
+
+  listenForState() {
+    this.$store.subscribe(state => {
+      this.loadTags();
+    });
   }
 
   @Watch('$route')
@@ -58,13 +84,29 @@ export default class NavBarSubTags extends Vue {
     }
   }
 
-  listenForState() {
-    this.$store.subscribe(state => {
-      this.loadTags();
-    });
+  getDirectoryForTag(tag: Tag) {
+    if (tag._directory) {
+      return DirectoryStore.state.directories.find(
+        directory => directory._id === tag._directory
+      );
+    } else {
+      return null;
+    }
   }
 
   loadTags() {
+    // Filter tags, which are a directory. They are a directory if the directory in store has the same name as the tag
+    this.tags = TagsStore.state.tags.filter(
+      tag =>
+        !tag._directory ||
+        (DirectoryStore.state.directories.find(
+          directory => directory._id === tag._directory
+        ) &&
+          DirectoryStore.state.directories.find(
+            directory => directory._id === tag._directory
+          )!.name !== tag.name)
+    );
+
     this.filterTags();
     this.tagsBadges = this.tags.map(tag => {
       return {
@@ -81,7 +123,7 @@ export default class NavBarSubTags extends Vue {
     if (this.selectedTag) {
       this.tags = this.getRelatedTags(this.selectedTag);
     } else {
-      this.tags = TagsStore.state.tags.filter(tag =>
+      this.tags = this.tags.filter(tag =>
         tag.name.toLowerCase().includes(this.filter.toLowerCase())
       );
     }
@@ -96,21 +138,25 @@ export default class NavBarSubTags extends Vue {
     BookmarksStore.state.bookmarks
       .filter(bookmark => bookmark.tags.includes(tag.name))
       .forEach(bookmark => (relatedTags = [...relatedTags, ...bookmark.tags]));
-    let tags = [...new Set(relatedTags)].filter(
-      tag => tag !== tag
-    );
+    let tags = [...new Set(relatedTags)].filter(tag => tag !== tag);
     tags = tags.filter(
       tag =>
-        MarksStore.state.marks.filter(mark => mark.tags.includes(tag)).length > 0 ||
-        BookmarksStore.state.bookmarks.filter(bookmark => bookmark.tags.includes(tag)).length >
-          0
+        MarksStore.state.marks.filter(mark => mark.tags.includes(tag)).length >
+          0 ||
+        BookmarksStore.state.bookmarks.filter(bookmark =>
+          bookmark.tags.includes(tag)
+        ).length > 0
     );
-    return TagsStore.state.tags.filter(tag =>
-    relatedTags.some(tagString => tagString === tag.name)).filter(tagTmp => tagTmp.name !== tag.name);
+    return this.tags
+      .filter(tag => relatedTags.some(tagString => tagString === tag.name))
+      .filter(tagTmp => tagTmp.name !== tag.name)
+      .filter(tag => tag.name.toLowerCase().includes(this.filter.toLowerCase()))
+      ;
   }
 
   getBadgeValue(tag: Tag) {
-    return MarksStore.state.marks.filter(mark => mark.tags.includes(tag.name))
+    return MarksStore.state.marks.filter(mark =>
+    mark.tags.includes(tag.name))
       .length;
   }
 
