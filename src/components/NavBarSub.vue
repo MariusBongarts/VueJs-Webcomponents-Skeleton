@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import SlideInTransition from './../components/Transitions/SlideInTransition.vue';
 import { Getter, Mutation } from 'vuex-class';
 import { NavigationStore } from '@/store/navigation-store';
@@ -21,6 +21,7 @@ import NavBarSubHome from './../components/NavBarSubHome.vue';
 import NavBarSubBookmarks from './../components/NavBarSubBookmarks.vue';
 import NavBarSubSearch from './../components/NavBarSubSearch.vue';
 import NavBarSubSettings from './../components/NavBarSubSettings.vue';
+import { Route } from 'vue-router';
 
 @Component({
   components: {
@@ -47,18 +48,19 @@ export default class NavBarSub extends Vue {
     this.show = NavigationStore.state.showSubMenu;
     this.mobile = screen.width < 900;
     this.listenForResize();
-    this.currentRoute = this.$route.name || '';
-    this.listenForRouter();
+    this.currentRoute = this.getComponentNameForCurrentRoute(this.$route.name);
     this.listenForState();
   }
 
-  listenForRouter() {
-    this.$router.beforeEach((to, from, next) => {
-      if (this.currentRoute !== to.name) {
-        this.currentRoute = to.name || '';
-      }
-      next();
-    });
+  @Watch('$route')
+  async onUrlChange(route: Route) {
+    this.currentRoute = this.getComponentNameForCurrentRoute(route.name);
+  }
+
+  // In nested routes with id´s the routeName is separeted by "-"
+  getComponentNameForCurrentRoute(routeName?: string) {
+    if (routeName) return routeName.split('-')[0];
+    return '';
   }
 
   listenForState() {
@@ -94,5 +96,4 @@ export default class NavBarSub extends Vue {
   overflow-y: scroll;
   overflow-x: hidden;
 }
-
 </style>

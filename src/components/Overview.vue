@@ -60,9 +60,9 @@ export default class Overview extends Vue {
   navigateBack() {
     const currentRoute = this.$route.name || '';
     if (this.selectedBookmark) {
-      this.$router.go(-1);
+      this.$router.push({ name: 'bookmarks-origin' });
     } else {
-      this.$router.push({ name: currentRoute });
+      this.$router.push({ name: 'bookmarks' });
     }
   }
 
@@ -73,16 +73,17 @@ export default class Overview extends Vue {
     this.selectedTag = undefined;
     this.selectedOrigin = '';
     this.selectedBookmark = undefined;
-    if (route.name === 'tags' && this.$route.params.id) {
+
+    if (route.name!.startsWith('tags') && this.$route.params.id) {
       this.selectedTag = TagsStore.state.tags.find(
         tag => tag._id === this.selectedId
       );
     }
-    if (route.name === 'bookmarks' && this.$route.params.origin) {
+    if (route.name!.startsWith('bookmarks') && this.$route.params.origin) {
       this.selectedOrigin = this.$route.params.origin;
     }
 
-    if (route.name === 'bookmarks' && this.$route.params.id) {
+    if (route.name!.startsWith('bookmarks') && this.$route.params.id) {
       this.selectedBookmark = BookmarksStore.state.bookmarks.find(
         bookmark => bookmark._id === this.$route.params.id
       );
@@ -140,7 +141,6 @@ export default class Overview extends Vue {
   getFilteredBookmarks() {
     let bookmarks = BookmarksStore.state.bookmarks;
 
-    // TODO: Take mark tags also into account
     if (this.selectedTag) {
       bookmarks = bookmarks.filter(
         bookmark =>
@@ -159,11 +159,9 @@ export default class Overview extends Vue {
     }
 
     if (this.selectedBookmark) {
-      // TODO: Scroll to selected Bookmark
       bookmarks = bookmarks.filter(
         bookmark => bookmark._id === this.selectedBookmark!._id
       );
-      console.log(bookmarks);
     }
     return bookmarks;
   }

@@ -2,11 +2,6 @@ import { AuthStore } from './store/auth-store';
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
-import Marks from './views/Marks.vue';
-import Bookmarks from './views/Bookmarks.vue';
-import Settings from './views/Settings.vue';
-import Account from './views/Account.vue';
-import Tags from './views/Tags.vue';
 import LandingPage from './views/LandingPage.vue';
 import LandingPageInfo from './components/LandingPageInfo.vue';
 import LoginContainer from './components/LoginContainer.vue';
@@ -36,7 +31,7 @@ const router = new Router({
     },
     {
       path: '/directories/:id',
-      name: 'directories',
+      name: 'directories-directory',
       component: Home,
       props: true
     },
@@ -47,13 +42,13 @@ const router = new Router({
     },
     {
       path: '/bookmarks/:origin',
-      name: 'bookmarks',
+      name: 'bookmarks-origin',
       component: Home,
       props: true
     },
     {
       path: '/bookmarks/:origin/:id',
-      name: 'bookmarks',
+      name: 'bookmarks-origin-bookmark',
       component: Home,
       props: true
     },
@@ -64,7 +59,7 @@ const router = new Router({
     },
     {
       path: '/tags/:id',
-      name: 'tags',
+      name: 'tags-tag',
       component: Home,
       props: true
     },
@@ -76,7 +71,7 @@ const router = new Router({
     {
       path: '/settings',
       name: 'settings',
-      component: () => import(/* webpackChunkName: "about" */ './views/Settings.vue'),
+      component: Home,
     },
     {
       path: '/about',
