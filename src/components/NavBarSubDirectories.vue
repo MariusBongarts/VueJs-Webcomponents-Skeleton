@@ -1,7 +1,7 @@
 <template>
   <div class="nav-directories-container">
     <div>
-      <SearchBarFilter @input="e => applyFilter(e)" />
+      <SearchBarFilter v-if="!limit" @input="e => applyFilter(e)" />
     </div>
     <div class="nav-directories">
       <NavBarSubDirectoryItem
@@ -10,7 +10,10 @@
         :directory="directoryBadge.directory"
         :badge="directoryBadge.badgeValue"
       />
-      <div class="tags" v-if="selectedDirectory && getTagsForDirectory().length">
+      <div
+        class="tags"
+        v-if="selectedDirectory && getTagsForDirectory().length"
+      >
         <NavBarSubTagsItem
           v-for="(tag, index) in getTagsForDirectory()"
           :key="index"
@@ -41,6 +44,8 @@ import { TagsStore } from '../store/tags-store';
   }
 })
 export default class NavBarSubDirectories extends Vue {
+  // Can be set to limit the shown directories to show favorites.
+  @Prop() limit!: number;
   directories: Directory[] = [];
   directoriesBadges: Array<{ directory: Directory; badgeValue: number }> = [];
   filter = '';
@@ -77,18 +82,26 @@ export default class NavBarSubDirectories extends Vue {
 
   loadDirectories() {
     this.filterDirectories();
-    this.directoriesBadges = this.directories.filter(directory =>
-    !directory._parentDirectory ||
-    (this.selectedDirectory && this.selectedDirectory._id === directory._parentDirectory)
-    ).map(directory => {
-      return {
-        directory,
-        badgeValue: this.getBadgeValue(directory)
-      };
-    });
+    this.directoriesBadges = this.directories
+      .filter(
+        directory =>
+          !directory._parentDirectory ||
+          (this.selectedDirectory &&
+            this.selectedDirectory._id === directory._parentDirectory)
+      )
+      .map(directory => {
+        return {
+          directory,
+          badgeValue: this.getBadgeValue(directory)
+        };
+      });
     this.directoriesBadges = this.directoriesBadges.sort(
       (a, b) => b.badgeValue - a.badgeValue
     );
+    // Slice array if limit is set
+    if (this.limit) {
+      this.directoriesBadges = this.directoriesBadges.slice(0, this.limit);
+    }
   }
 
   filterDirectories() {
@@ -115,8 +128,8 @@ export default class NavBarSubDirectories extends Vue {
     if (directory) {
       return TagsStore.state.tags.filter(
         tag =>
-        tag._directory === directory!._id &&
-        tag.name.toLowerCase().includes(this.filter.toLowerCase())
+          tag._directory === directory!._id &&
+          tag.name.toLowerCase().includes(this.filter.toLowerCase())
       );
     } else {
       return [];
@@ -147,7 +160,6 @@ export default class NavBarSubDirectories extends Vue {
 .nav-directories {
   height: 100%;
   overflow-y: scroll;
-  margin-bottom: 50px;
 }
 
 // Custom scrollbar

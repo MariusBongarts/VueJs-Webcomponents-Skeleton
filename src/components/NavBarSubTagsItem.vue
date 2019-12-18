@@ -4,7 +4,7 @@
       <TagIcon />
       {{ tag.name }}</span
     >
-    <i v-if="badge" class="logo-badge">{{ badge }}</i>
+    <i v-if="badge && showBadge" class="logo-badge">{{ badge }}</i>
   </div>
 </template>
 
@@ -23,6 +23,7 @@ import TagIcon from './../components/Icons/TagIcon.vue';
 export default class NavBarSubTagsItem extends Vue {
   @Prop() tag!: Tag;
   @Prop() badge!: number;
+  @Prop({ default: true }) showBadge!: boolean;
   @Mutation closeSubMenu!: () => void;
 
   async navigateToTag() {

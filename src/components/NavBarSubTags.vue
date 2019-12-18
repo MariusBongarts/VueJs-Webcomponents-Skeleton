@@ -1,6 +1,7 @@
 <template>
   <div class="nav-tags-container">
-    <div>
+    <!-- Search bar will be hidden when the limit of shown tags is set -->
+    <div v-if="!limit">
       <SearchBarFilter @input="e => applyFilter(e)" />
     </div>
     <div ref="container" class="nav-tags">
@@ -19,12 +20,12 @@
         />
       </div>
 
-      <!-- Show related Tags -->
       <NavBarSubTagsItem
         v-for="(tagBadge, index) in getInfiniteScrollTags()"
         :key="index"
         :tag="tagBadge.tag"
         :badge="tagBadge.badgeValue"
+        :showBadge="!limit"
       />
     </div>
   </div>
@@ -50,6 +51,8 @@ import { DirectoryStore } from '../store/directory-store';
   }
 })
 export default class NavBarSubTags extends Vue {
+  // Can be set to limit the shown tags.
+  @Prop() limit!: number;
   tags: Tag[] = [];
   tagsBadges: Array<{ tag: Tag; badgeValue: number }> = [];
   filter = '';
@@ -64,7 +67,7 @@ export default class NavBarSubTags extends Vue {
   }
 
   getInfiniteScrollTags() {
-    return this.tagsBadges.slice(0, this.pagination);
+    return this.tagsBadges.slice(0, this.limit || this.pagination);
   }
 
   // InfiniteScolling: When user scrolled to bottom 20 more items will be reloaded
@@ -193,7 +196,6 @@ export default class NavBarSubTags extends Vue {
 .nav-tags {
   height: 100%;
   overflow-y: scroll;
-  margin-bottom: 50px;
 }
 
 // Custom scrollbar

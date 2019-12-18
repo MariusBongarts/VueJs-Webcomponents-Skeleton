@@ -1,7 +1,7 @@
 <template>
   <div class="nav-bookmarks-container">
     <div>
-      <SearchBarFilter @input="e => applyFilter(e)" />
+      <SearchBarFilter v-if="!limit" @input="e => applyFilter(e)" />
     </div>
     <div class="nav-bookmarks">
       <NavBarSubBookmarksOriginItem
@@ -36,6 +36,8 @@ import { Route } from 'vue-router';
   }
 })
 export default class NavBarSubBookmarks extends Vue {
+  // Can be set to limit the shown origins to show favorites.
+  @Prop() limit!: number;
   bookmarks: Bookmark[] = [];
   origins: string[] = [];
   bookmarksBadges: Array<{ bookmark: Bookmark; badgeValue: number }> = [];
@@ -58,7 +60,10 @@ export default class NavBarSubBookmarks extends Vue {
 
   getCurrentRouteInfo() {
     this.selectedOrigin = '';
-    if (this.$route.name!.startsWith('bookmarks-origin') && this.$route.params.origin) {
+    if (
+      this.$route.name!.startsWith('bookmarks-origin') &&
+      this.$route.params.origin
+    ) {
       this.selectedOrigin = this.$route.params.origin;
     }
   }
@@ -76,7 +81,7 @@ export default class NavBarSubBookmarks extends Vue {
 
   getBookMarkBadgeForOrigin(origin: string) {
     return this.bookmarksBadges.filter(bookmarkBadge =>
-      bookmarkBadge.bookmark.url.split('/')[2].startsWith((origin))
+      bookmarkBadge.bookmark.url.split('/')[2].startsWith(origin)
     );
   }
 
@@ -110,19 +115,24 @@ export default class NavBarSubBookmarks extends Vue {
       (a, b) => b.badgeValue - a.badgeValue
     );
     this.originBadges = this.originBadges.filter(origin => origin.origin);
+    // Slice array if limit is set
+    if (this.limit) {
+      this.originBadges = this.originBadges.slice(0, this.limit);
+    }
   }
 
   filterBookmarks() {
-    this.bookmarks = BookmarksStore.state.bookmarks.filter(bookmark =>
-      bookmark.url.toLowerCase().includes(this.filter.toLowerCase()) ||
-      bookmark.title && bookmark.title.toLowerCase().includes(this.filter.toLowerCase())
+    this.bookmarks = BookmarksStore.state.bookmarks.filter(
+      bookmark =>
+        bookmark.url.toLowerCase().includes(this.filter.toLowerCase()) ||
+        (bookmark.title &&
+          bookmark.title.toLowerCase().includes(this.filter.toLowerCase()))
     );
   }
 
   getBadgeValue(bookmark: Bookmark) {
-    return MarksStore.state.marks.filter(
-      mark => mark.url === bookmark.url
-    ).length;
+    return MarksStore.state.marks.filter(mark => mark.url === bookmark.url)
+      .length;
   }
 
   // Filter got from SearchBar to filter bookmarks
@@ -143,7 +153,6 @@ export default class NavBarSubBookmarks extends Vue {
 .nav-bookmarks {
   height: 100%;
   overflow-y: scroll;
-  margin-bottom: 50px;
 }
 
 // Custom scrollbar

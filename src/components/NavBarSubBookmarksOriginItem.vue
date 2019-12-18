@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!selected" class="origin-item" @click="navigateToOrigin()">
-      <span>{{ origin }}</span>
+      <span><LinkIcon />{{ origin }}</span>
       <i class="logo-badge">{{ badge }}</i>
     </div>
     <div class="nav-bookmarks" v-if="selected">
@@ -22,10 +22,12 @@ import { BookmarksStore } from '../store/bookmarks-store';
 import { MarksStore } from '../store/marks-store';
 import { Mutation } from 'vuex-class';
 import NavBarSubBookmarksItem from './../components/NavBarSubBookmarksItem.vue';
+import LinkIcon from './../components/Icons/LinkIcon.vue';
 
 @Component({
   components: {
-    NavBarSubBookmarksItem
+    NavBarSubBookmarksItem,
+    LinkIcon
   }
 })
 export default class NavBarSubBookmarksOriginItem extends Vue {
@@ -75,6 +77,7 @@ export default class NavBarSubBookmarksOriginItem extends Vue {
   margin: 2px;
   width: 80%;
   word-break: break-all;
+  text-align: left;
 }
 
 .logo-badge {
@@ -88,6 +91,10 @@ export default class NavBarSubBookmarksOriginItem extends Vue {
   line-height: 2;
   text-align: center;
   margin: auto 5px;
+}
+
+svg {
+  height: 20px;
 }
 
 @media (max-width: 900px) {

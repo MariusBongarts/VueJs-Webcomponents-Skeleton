@@ -1,18 +1,25 @@
 <template>
   <div class="nav-home">
-    Home works
+    <NavBarSubHomeFavorites />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import NavBarSubHomeFavorites from './NavBarSubHomeFavorites.vue';
 
 @Component({
   name: 'NavBarSub-home',
-  components: {}
+  components: {
+    NavBarSubHomeFavorites
+  }
 })
 export default class NavBarSubHome extends Vue {}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.nav-home {
+  height: 100%;
+}
+</style>
