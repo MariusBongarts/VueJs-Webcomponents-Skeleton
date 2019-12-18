@@ -40,7 +40,7 @@ export default class NavBarMainItem extends Vue {
   @Mutation showSubMenu!: () => void;
 
   mounted() {
-    if (this.$route.name === this.navItem.name) {
+    if (this.$route.name!.startsWith(this.navItem.name)) {
       this.active = true;
     } else {
       this.active = false;
