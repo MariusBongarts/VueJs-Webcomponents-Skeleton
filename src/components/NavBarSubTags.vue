@@ -40,6 +40,7 @@ import { MarksStore } from '../store/marks-store';
 import SearchBarFilter from './../components/SearchBarFilter.vue';
 import { BookmarksStore } from '../store/bookmarks-store';
 import { DirectoryStore } from '../store/directory-store';
+import { SearchStore } from '../store/search-store';
 
 @Component({
   name: 'NavBarSub-tags',
@@ -82,6 +83,9 @@ export default class NavBarSubTags extends Vue {
 
   listenForState() {
     this.$store.subscribe(state => {
+      if (SearchStore.state.filter) {
+        this.filter = SearchStore.state.filter;
+      }
       this.loadTags();
     });
   }

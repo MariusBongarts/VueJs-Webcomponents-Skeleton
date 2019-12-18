@@ -2,7 +2,7 @@
   <div class="nav-favorites">
     <!-- Favorite folders -->
     <div class="favorite-container tags">
-      <div class="header"><FolderIcon /> <span>Favorite Directories</span></div>
+      <div class="header"><FolderIcon /> <span>Directories</span></div>
       <div class="main">
         <NavBarSubDirectories :limit="5" />
       </div>
@@ -11,7 +11,7 @@
     <div class="favorite-container tags">
       <div class="header">
         <TagIcon />
-        <span>Favorite Tags</span>
+        <span>Tags</span>
       </div>
       <div class="main">
         <NavBarSubTags :limit="5" />
@@ -20,7 +20,7 @@
 
     <!-- Favorite origins -->
     <div class="favorite-container tags">
-      <div class="header"><LinkIcon /> <span>Favorite Origins</span></div>
+      <div class="header"><LinkIcon /> <span>Origins</span></div>
       <div class="main">
         <NavBarSubBookmarks :limit="5" />
       </div>

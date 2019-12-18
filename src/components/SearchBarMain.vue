@@ -6,7 +6,7 @@
       ref="searchInput"
       class="searchInput"
       type="search"
-      placeholder="Filter"
+      placeholder="Search"
       autocomplete="off"
       @input="emitFilter()"
     />
@@ -25,13 +25,14 @@ import { Route } from 'vue-router';
     SearchIcon
   }
 })
-export default class SearchBarFilter extends Vue {
+export default class SearchBarMain extends Vue {
   // Is set to true after first input and to false evry 500 ms to prevent too many emit events
   emitBlocked = false;
-
   emitFilter(e: HTMLInputElement) {
     const inputElement = this.$refs.searchInput as HTMLInputElement;
-    this.$emit('input', inputElement.value);
+    if (!this.emitBlocked) {
+      this.$emit('input', inputElement.value);
+    }
 
     // Prevent too many emit events
     this.emitBlocked = true;
@@ -39,7 +40,6 @@ export default class SearchBarFilter extends Vue {
       if (this.emitBlocked) this.$emit('input', inputElement.value);
       this.emitBlocked = false;
     }, 500);
-
   }
 
   clearInput() {
@@ -62,18 +62,7 @@ export default class SearchBarFilter extends Vue {
   z-index: 9999 !important;
 }
 
-.search-bar-filter > *,
-.search-bar-filter {
-  transition: background-color 1s ease;
-}
-
-.search-bar-filter:focus-within > *,
-.search-bar-filter:focus-within {
-  background-color: $secondary-color;
-  color: white;
-}
-
-.search-bar-filter:hover > * {
+.search-bar-filter > * {
   color: white;
 }
 
@@ -92,7 +81,7 @@ svg {
   color: white;
   margin: auto 0px;
   flex: 1 auto;
-  font-size: 15px;
+  font-size: 1em;
 }
 
 input[type='search']::-webkit-search-cancel-button {

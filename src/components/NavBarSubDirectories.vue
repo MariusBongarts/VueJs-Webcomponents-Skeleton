@@ -34,6 +34,7 @@ import { MarksStore } from '../store/marks-store';
 import SearchBarFilter from './../components/SearchBarFilter.vue';
 import { BookmarksStore } from '../store/bookmarks-store';
 import { TagsStore } from '../store/tags-store';
+import { SearchStore } from '../store/search-store';
 
 @Component({
   name: 'NavBarSub-directories',
@@ -76,6 +77,9 @@ export default class NavBarSubDirectories extends Vue {
 
   listenForState() {
     this.$store.subscribe(state => {
+      if (SearchStore.state.filter) {
+        this.filter = SearchStore.state.filter;
+      }
       this.loadDirectories();
     });
   }

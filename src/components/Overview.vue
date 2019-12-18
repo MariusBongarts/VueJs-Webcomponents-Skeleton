@@ -1,10 +1,18 @@
 <template>
   <div class="overview" ref="overview" :v-if="bookmarks.length">
+    <!-- Selected directory, bookmark or tag -->
     <SlideInFromTop>
       <div class="selected-header" v-if="getHeader()">
         <ArrowLeftIcon @click="navigateBack()" class="icon back-icon" />
         <span>{{ getHeader() }} </span>
         <component v-if="getIcon()" :is="getIcon()" class="icon" />
+      </div>
+    </SlideInFromTop>
+
+    <!-- SearchBar -->
+    <SlideInFromTop>
+      <div class="selected-header" v-if="searchActive">
+        <SearchBarMain @input="e => applyFilter(e)"/>
       </div>
     </SlideInFromTop>
 
@@ -25,6 +33,7 @@ import { NavigationStore } from '../store/navigation-store';
 import { Route } from 'vue-router';
 import OverviewBookmark from './../components/OverviewBookmark.vue';
 import ArrowLeftIcon from './../components/Icons/ArrowLeftIcon.vue';
+import SearchBarMain from './../components/SearchBarMain.vue';
 import BlurIn from './../components/animations/BlurIn.vue';
 import SlideInFromTop from './../components/animations/SlideInFromTop.vue';
 import SlideInFromTopGroup from './../components/animations/SlideInFromTopGroup.vue';
@@ -41,6 +50,7 @@ import { DirectoryStore } from '../store/directory-store';
 import FolderIcon from './../components/Icons/FolderIcon.vue';
 import TagIcon from './../components/Icons/TagIcon.vue';
 import BookmarkIcon from './../components/Icons/BookmarkIcon.vue';
+import { SearchStore } from '../store/search-store';
 
 @Component({
   components: {
@@ -51,20 +61,26 @@ import BookmarkIcon from './../components/Icons/BookmarkIcon.vue';
     SlideInFromTopGroup,
     FolderIcon,
     TagIcon,
-    BookmarkIcon
+    BookmarkIcon,
+    SearchBarMain
   }
 })
 export default class Overview extends Vue {
   bookmarks: Bookmark[] = [];
   @Mutation initMarks!: () => void;
+  @Mutation applyFilter!: (filter: string) => void;
 
   // Id param of path
   selectedId = '';
+
+  // Current filter of searchBar
+  filter = '';
 
   selectedTag!: Tag | undefined;
   selectedOrigin: string = '';
   selectedBookmark!: Bookmark | undefined;
   selectedDirectory!: Directory | undefined;
+  searchActive = false;
 
   pagination = 10;
 
@@ -105,12 +121,14 @@ export default class Overview extends Vue {
   // If there is an id in the path it will be shown. Otherwise all marks
   @Watch('$route')
   async onUrlChange(route: Route) {
+    this.applyFilter('');
     this.scrollToTop();
     this.selectedId = this.$route.params.id || '';
     this.selectedTag = undefined;
     this.selectedOrigin = '';
     this.selectedBookmark = undefined;
     this.selectedDirectory = undefined;
+    this.searchActive = false;
 
     if (route.name!.startsWith('tags') && this.$route.params.id) {
       this.selectedTag = TagsStore.state.tags.find(
@@ -132,16 +150,21 @@ export default class Overview extends Vue {
       this.selectedBookmark = BookmarksStore.state.bookmarks.find(
         bookmark => bookmark._id === this.$route.params.id
       );
+      await this.loadBookmarks();
     }
 
-    await this.loadBookmarks();
+    if (route.name!.startsWith('search')) {
+      this.searchActive = true;
+    }
+
   }
 
   getMarksForBookmark(bookmark: Bookmark) {
     const marks = MarksStore.state.marks.filter(
       mark =>
         mark.url === bookmark.url &&
-        (!this.selectedTag || mark.tags.includes(this.selectedTag.name))
+        (!this.selectedTag || mark.tags.includes(this.selectedTag.name)) &&
+        (mark.text && mark.text.toLowerCase().includes(this.filter.toLowerCase()))
     );
     return marks;
   }
@@ -181,7 +204,8 @@ export default class Overview extends Vue {
 
   listenForState() {
     this.$store.subscribe(state => {
-      if (BookmarksStore.state.bookmarks.length !== this.bookmarks.length) {
+      this.filter = SearchStore.state.filter;
+      if (BookmarksStore.state.bookmarks.length !== this.bookmarks.length || this.filter) {
         this.loadBookmarks();
       }
     });
@@ -250,6 +274,15 @@ export default class Overview extends Vue {
       }
       bookmarks = tmp;
     }
+    if (this.filter) {
+      bookmarks = BookmarksStore.state.bookmarks.filter(bookmark =>
+      (bookmark.url && bookmark.url.toLowerCase().includes(this.filter)) ||
+      (bookmark.title && bookmark.title.toLowerCase().includes(this.filter)) ||
+      this.getMarksForBookmark(bookmark).some(mark =>
+      (mark.text && mark.text.toLowerCase().includes(this.filter.toLowerCase()))
+      )
+      );
+    }
 
     return bookmarks;
   }
@@ -269,6 +302,7 @@ export default class Overview extends Vue {
   display: flex;
   justify-content: left;
   z-index: 9998 !important;
+  padding: 0px 10px;
   .icon {
     margin: auto 10px;
   }

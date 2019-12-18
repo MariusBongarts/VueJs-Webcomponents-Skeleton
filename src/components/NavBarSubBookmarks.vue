@@ -27,6 +27,7 @@ import NavBarSubBookmarksOriginItem from './../components/NavBarSubBookmarksOrig
 import { MarksStore } from '../store/marks-store';
 import SearchBarFilter from './../components/SearchBarFilter.vue';
 import { Route } from 'vue-router';
+import { SearchStore } from '../store/search-store';
 
 @Component({
   name: 'NavBarSub-bookmarks',
@@ -75,6 +76,9 @@ export default class NavBarSubBookmarks extends Vue {
 
   listenForState() {
     this.$store.subscribe(state => {
+      if (SearchStore.state.filter) {
+        this.filter = SearchStore.state.filter;
+      }
       this.loadData();
     });
   }
