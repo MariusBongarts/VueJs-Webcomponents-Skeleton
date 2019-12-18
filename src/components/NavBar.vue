@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import SlideInTransition from './../components/Transitions/SlideInTransition.vue';
 import NavBarSub from './../components/NavBarSub.vue';
 import NavBarMain from './../components/NavBarMain.vue';
@@ -33,6 +33,7 @@ import MenuIcon from './../components/Icons/MenuIcon.vue';
 import CloseIcon from './../components/Icons/CloseIcon.vue';
 import { NavigationStore } from '../store/navigation-store';
 import { SearchStore } from '../store/search-store';
+import { Route } from 'vue-router';
 
 @Component({
   components: {
@@ -54,6 +55,13 @@ export default class NavBar extends Vue {
     this.listenForState();
   }
 
+  @Watch('$route')
+  async onUrlChange(route: Route) {
+    if (route.name === 'search') {
+      this.showMobileNav = false;
+    }
+  }
+
   listenForResize() {
     window.addEventListener('resize', () => {
       this.mobile = window.innerWidth < 900;
@@ -61,7 +69,7 @@ export default class NavBar extends Vue {
   }
   listenForState() {
     this.$store.subscribe(state => {
-      if (this.mobile && !SearchStore.state.filter) {
+      if (this.$route.name !== 'search') {
         this.showMobileNav = NavigationStore.state.showSubMenu;
       }
     });
@@ -77,7 +85,8 @@ export default class NavBar extends Vue {
 <style scoped lang="scss">
 @import './../variables.scss';
 
-.burger-menu, .close-menu {
+.burger-menu,
+.close-menu {
   position: fixed;
   right: 10px;
   top: 10px;

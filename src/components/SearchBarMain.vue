@@ -89,8 +89,9 @@ input[type='search']::-webkit-search-cancel-button {
   -webkit-appearance: none;
 
   /* Custom cancel input button */
-  height: 20px;
-  width: 20px;
+  height: 30px;
+  width: 30px;
+  margin-right: 100px;
   cursor: pointer;
   // Use feather icon x
   background-image: url('data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iY29sb3I6d2hpdGUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXIteCI+PGxpbmUgeDE9IjE4IiB5MT0iNiIgeDI9IjYiIHkyPSIxOCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iNiIgeDI9IjE4IiB5Mj0iMTgiPjwvbGluZT48L3N2Zz4=');

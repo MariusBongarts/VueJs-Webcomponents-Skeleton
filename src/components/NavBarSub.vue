@@ -49,11 +49,18 @@ export default class NavBarSub extends Vue {
     this.mobile = screen.width < 900;
     this.listenForResize();
     this.currentRoute = this.getComponentNameForCurrentRoute(this.$route.name);
+    this.listenForState();
   }
 
   @Watch('$route')
   async onUrlChange(route: Route) {
     this.currentRoute = this.getComponentNameForCurrentRoute(route.name);
+  }
+
+  listenForState() {
+    this.$store.subscribe(() => {
+        this.show = NavigationStore.state.showSubMenu;
+    });
   }
 
   // In nested routes with id´s the routeName is separeted by "-"
