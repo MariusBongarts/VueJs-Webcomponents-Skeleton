@@ -15,7 +15,6 @@
         "
       >
         <NavBarSubDirectoryItem
-          :key="index"
           :directory="getDirectoryForTag(selectedTag)"
         />
       </div>
