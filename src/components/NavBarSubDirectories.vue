@@ -134,6 +134,7 @@ export default class NavBarSubDirectories extends Vue {
       return TagsStore.state.tags.filter(
         tag =>
           tag._directory === directory!._id &&
+          tag.name !== directory!.name &&
           tag.name.toLowerCase().includes(this.filter.toLowerCase())
       );
     } else {
