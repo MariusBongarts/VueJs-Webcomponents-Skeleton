@@ -48,6 +48,7 @@ export default class NavBarSubBookmarks extends Vue {
 
   mounted() {
     this.bookmarks = BookmarksStore.state.bookmarks;
+    this.filter = SearchStore.state.filter;
     this.getCurrentRouteInfo();
     this.loadData();
     this.listenForState();

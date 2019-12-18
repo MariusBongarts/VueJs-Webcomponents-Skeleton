@@ -54,6 +54,7 @@ export default class NavBarSubDirectories extends Vue {
 
   mounted() {
     this.directories = DirectoryStore.state.directories;
+    this.filter = SearchStore.state.filter;
     this.getSelectedDirectory();
     this.loadDirectories();
     this.listenForState();

@@ -49,7 +49,6 @@ export default class NavBarSub extends Vue {
     this.mobile = screen.width < 900;
     this.listenForResize();
     this.currentRoute = this.getComponentNameForCurrentRoute(this.$route.name);
-    this.listenForState();
   }
 
   @Watch('$route')
@@ -61,12 +60,6 @@ export default class NavBarSub extends Vue {
   getComponentNameForCurrentRoute(routeName?: string) {
     if (routeName) return routeName.split('-')[0];
     return '';
-  }
-
-  listenForState() {
-    this.$store.subscribe(() => {
-      this.show = NavigationStore.state.showSubMenu;
-    });
   }
 
   listenForResize() {

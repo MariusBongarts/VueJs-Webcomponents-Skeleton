@@ -60,6 +60,7 @@ export default class NavBarSubTags extends Vue {
   pagination = 50;
 
   mounted() {
+    this.filter = SearchStore.state.filter;
     this.getSelectedTag();
     this.loadTags();
     this.listenForState();

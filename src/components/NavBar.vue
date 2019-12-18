@@ -32,6 +32,7 @@ import NavBarMainItem from './../components/NavBarMainItem.vue';
 import MenuIcon from './../components/Icons/MenuIcon.vue';
 import CloseIcon from './../components/Icons/CloseIcon.vue';
 import { NavigationStore } from '../store/navigation-store';
+import { SearchStore } from '../store/search-store';
 
 @Component({
   components: {
@@ -60,7 +61,7 @@ export default class NavBar extends Vue {
   }
   listenForState() {
     this.$store.subscribe(state => {
-      if (this.mobile) {
+      if (this.mobile && !SearchStore.state.filter) {
         this.showMobileNav = NavigationStore.state.showSubMenu;
       }
     });
