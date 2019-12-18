@@ -1,5 +1,12 @@
 <template>
   <div class="nav-favorites">
+    <!-- Favorite folders -->
+    <div class="favorite-container tags">
+      <div class="header"><FolderIcon /> <span>Favorite Directories</span></div>
+      <div class="main">
+        <NavBarSubDirectories :limit="5" />
+      </div>
+    </div>
     <!-- Favorite tags -->
     <div class="favorite-container tags">
       <div class="header">
@@ -8,16 +15,6 @@
       </div>
       <div class="main">
         <NavBarSubTags :limit="5" />
-      </div>
-    </div>
-
-    <!-- Favorite folders -->
-    <div class="favorite-container tags">
-      <div class="header">
-        <FolderIcon /> <span>Favorite Bookmarks</span>
-      </div>
-      <div class="main">
-        <NavBarSubDirectories :limit="5" />
       </div>
     </div>
 
