@@ -12,7 +12,7 @@
     <!-- SearchBar -->
     <SlideInFromTop>
       <div class="selected-header" v-if="searchActive">
-        <SearchBarMain @input="e => applyFilter(e)"/>
+        <SearchBarMain @input="e => applyFilter(e)" />
       </div>
     </SlideInFromTop>
 
@@ -150,13 +150,13 @@ export default class Overview extends Vue {
       this.selectedBookmark = BookmarksStore.state.bookmarks.find(
         bookmark => bookmark._id === this.$route.params.id
       );
-      await this.loadBookmarks();
     }
 
     if (route.name!.startsWith('search')) {
       this.searchActive = true;
     }
 
+    await this.loadBookmarks();
   }
 
   getMarksForBookmark(bookmark: Bookmark) {
@@ -164,7 +164,7 @@ export default class Overview extends Vue {
       mark =>
         mark.url === bookmark.url &&
         (!this.selectedTag || mark.tags.includes(this.selectedTag.name)) &&
-        (mark.text && mark.text.toLowerCase().includes(this.filter.toLowerCase()))
+        mark.text && mark.text.toLowerCase().includes(this.filter.toLowerCase())
     );
     return marks;
   }
@@ -205,7 +205,10 @@ export default class Overview extends Vue {
   listenForState() {
     this.$store.subscribe(state => {
       this.filter = SearchStore.state.filter;
-      if (BookmarksStore.state.bookmarks.length !== this.bookmarks.length || this.filter) {
+      if (
+        BookmarksStore.state.bookmarks.length !== this.bookmarks.length ||
+        this.filter
+      ) {
         this.loadBookmarks();
       }
     });
@@ -275,12 +278,16 @@ export default class Overview extends Vue {
       bookmarks = tmp;
     }
     if (this.filter) {
-      bookmarks = BookmarksStore.state.bookmarks.filter(bookmark =>
-      (bookmark.url && bookmark.url.toLowerCase().includes(this.filter)) ||
-      (bookmark.title && bookmark.title.toLowerCase().includes(this.filter)) ||
-      this.getMarksForBookmark(bookmark).some(mark =>
-      (mark.text && mark.text.toLowerCase().includes(this.filter.toLowerCase()))
-      )
+      bookmarks = BookmarksStore.state.bookmarks.filter(
+        bookmark =>
+          (bookmark.url && bookmark.url.toLowerCase().includes(this.filter)) ||
+          (bookmark.title &&
+            bookmark.title.toLowerCase().includes(this.filter)) ||
+          this.getMarksForBookmark(bookmark).some(
+            mark =>
+              mark.text &&
+              mark.text.toLowerCase().includes(this.filter.toLowerCase())
+          )
       );
     }
 
