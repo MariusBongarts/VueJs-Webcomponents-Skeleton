@@ -66,7 +66,7 @@ export default class NavBarSub extends Vue {
   // In nested routes with id´s the routeName is separeted by "-"
   getComponentNameForCurrentRoute(routeName?: string) {
     if (routeName) return routeName.split('-')[0];
-    return '/home';
+    return 'home';
   }
 
   listenForResize() {
