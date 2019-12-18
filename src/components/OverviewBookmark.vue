@@ -1,24 +1,24 @@
 <template>
-    <div class="mark-overview">
-      <div class="header">
-        <h4>{{ bookmark.title }}</h4>
-      </div>
-      <OverviewMarkElement
-        class="mark-element"
-        v-for="(mark, index) in marks"
-        :key="index"
-        :mark="mark"
-      >
-      </OverviewMarkElement>
-      <div class="header">
-        <h5>
-          {{ getTimestamp(bookmark.createdAt) }} -
-          <a :data-tooltip="bookmark.url" target="_blank" :href="bookmark.url">
-            {{ bookmark.url.split('/')[2] }}</a
-          >
-        </h5>
-      </div>
+  <div class="mark-overview">
+    <div class="header-title">
+      <h4>{{ bookmark.title }}</h4>
     </div>
+    <OverviewMarkElement
+      class="mark-element"
+      v-for="(mark, index) in marks"
+      :key="index"
+      :mark="mark"
+    >
+    </OverviewMarkElement>
+    <div class="header">
+      <h5>
+        {{ getTimestamp(bookmark.createdAt) }} -
+        <a :data-tooltip="bookmark.url" target="_blank" :href="bookmark.url">
+          {{ bookmark.url.split('/')[2] }}</a
+        >
+      </h5>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -85,19 +85,20 @@ export default class OverviewBookmark extends Vue {
 }
 
 .mark-overview {
-  margin-top: 50px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  padding: 50px 0px;
+  border-bottom: 1px solid $white-dark;
+  padding: 20px 0px;
 
-  .header {
+  .header-title {
     display: flex;
     justify-content: center;
-
-    a {
-      color: $font-color;
-      text-decoration: none;
-    }
+    color: $font-color;
+    padding: 0px 20px;
   }
+}
+
+a {
+  color: $font-color;
+  text-decoration: none;
 }
 
 .mark-overview {
@@ -107,7 +108,7 @@ export default class OverviewBookmark extends Vue {
 
 .mark-element {
   background-color: white;
-  margin-top: 30px;
+  margin-top: 15px;
 }
 
 @media (min-width: 720px) {
@@ -115,18 +116,18 @@ export default class OverviewBookmark extends Vue {
     border-radius: 5px;
   }
   .mark-overview {
-    padding: 50px 50px;
+    padding: 15px 50px;
   }
 }
 
 @media (min-width: 900px) {
   .mark-overview {
-    padding: 50px 100px;
+    padding: 15px 50px;
   }
 }
 @media (min-width: 1200px) {
   .mark-overview {
-    padding: 50px 150px;
+    padding: 30px 150px;
   }
 }
 </style>

@@ -36,23 +36,24 @@ export default class OverviewMarkElement extends Vue {
 
 blockquote {
   color: $font-color;
-  padding: 20px 30px 20px 75px;
+  padding: 20px 30px 20px 30px;
   box-sizing: content-box;
   line-height: 1.6;
   position: relative;
   text-align: justify;
   margin: 0;
-  font-size: 1em;
+  font-size: 0.9em;
 }
 
 blockquote::before {
   font-family: Arial;
   content: '\201C';
   color: $primary-color;
-  font-size: 5em;
+  font-size: 4em;
   position: absolute;
   left: 10px;
-  top: -45px;
+  top: -25px;
+  z-index: 9999 !important;
 }
 
 blockquote:nth-of-type(even) {
