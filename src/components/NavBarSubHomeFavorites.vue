@@ -2,7 +2,7 @@
   <div class="nav-favorites">
     <!-- Favorite folders -->
     <div class="favorite-container tags">
-      <div class="header"><FolderIcon /> <span>Directories</span></div>
+      <div class="header"><FolderIcon /></div>
       <div class="main">
         <NavBarSubDirectories :limit="5" />
       </div>
@@ -11,7 +11,6 @@
     <div class="favorite-container tags">
       <div class="header">
         <TagIcon />
-        <span>Tags</span>
       </div>
       <div class="main">
         <NavBarSubTags :limit="5" />
@@ -20,7 +19,7 @@
 
     <!-- Favorite origins -->
     <div class="favorite-container tags">
-      <div class="header"><LinkIcon /> <span>Origins</span></div>
+      <div class="header"><LinkIcon /></div>
       <div class="main">
         <NavBarSubBookmarks :limit="5" />
       </div>
@@ -63,7 +62,7 @@ export default class NavBarSubHomeFavorites extends Vue {}
   .header {
     display: flex;
     justify-content: space-between;
-    margin: 5px;
+    margin: 5px 10px;
     span {
       margin: auto 0px;
     }

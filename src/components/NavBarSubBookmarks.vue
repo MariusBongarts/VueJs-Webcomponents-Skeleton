@@ -3,6 +3,11 @@
     <div>
       <SearchBarFilter v-if="!limit" @input="e => applyFilter(e)" />
     </div>
+    <div class="selected-header" v-if="selectedOrigin">
+      <ArrowLeftIcon @click="navigateBack()" class="icon back-icon" />
+      <span>{{ selectedOrigin }} </span>
+      <LinkIcon class="icon" />
+    </div>
     <div class="nav-bookmarks">
       <NavBarSubBookmarksOriginItem
         v-for="(originBadge, index) in originBadges.filter(
@@ -28,12 +33,16 @@ import { MarksStore } from '../store/marks-store';
 import SearchBarFilter from './../components/SearchBarFilter.vue';
 import { Route } from 'vue-router';
 import { SearchStore } from '../store/search-store';
+import LinkIcon from './../components/Icons/LinkIcon.vue';
+import ArrowLeftIcon from './../components/Icons/ArrowLeftIcon.vue';
 
 @Component({
   name: 'NavBarSub-bookmarks',
   components: {
     NavBarSubBookmarksOriginItem,
-    SearchBarFilter
+    SearchBarFilter,
+    LinkIcon,
+    ArrowLeftIcon
   }
 })
 export default class NavBarSubBookmarks extends Vue {
@@ -52,6 +61,10 @@ export default class NavBarSubBookmarks extends Vue {
     this.getCurrentRouteInfo();
     this.loadData();
     this.listenForState();
+  }
+
+  navigateBack() {
+    this.$router.go(-1);
   }
 
   // Check if an origin is selected
@@ -160,6 +173,31 @@ export default class NavBarSubBookmarks extends Vue {
   overflow-y: scroll;
 }
 
+.selected-header {
+  background: $primary-color;
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: left;
+  z-index: 9998 !important;
+  padding: 10px 0;
+  margin-bottom: 10px;
+  .icon {
+    margin: auto 10px;
+  }
+  .back-icon {
+    cursor: pointer;
+  }
+
+  span {
+    margin: auto 10px;
+  }
+}
+
+
+svg {
+  width: 20px;
+}
 // Custom scrollbar
 /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
 @media (min-width: 600px) {

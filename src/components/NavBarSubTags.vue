@@ -4,6 +4,11 @@
     <div v-if="!limit">
       <SearchBarFilter @input="e => applyFilter(e)" />
     </div>
+    <div class="selected-header" v-if="selectedTag">
+      <ArrowLeftIcon @click="navigateBack()" class="icon back-icon" />
+      <span>{{ selectedTag.name }} </span>
+      <TagIcon class="icon" />
+    </div>
     <div ref="container" class="nav-tags">
       <!-- Show directory of selected Tag, when exists -->
       <div
@@ -14,9 +19,7 @@
             getDirectoryForTag(selectedTag)
         "
       >
-        <NavBarSubDirectoryItem
-          :directory="getDirectoryForTag(selectedTag)"
-        />
+        <NavBarSubDirectoryItem :directory="getDirectoryForTag(selectedTag)" />
       </div>
 
       <NavBarSubTagsItem
@@ -40,13 +43,16 @@ import SearchBarFilter from './../components/SearchBarFilter.vue';
 import { BookmarksStore } from '../store/bookmarks-store';
 import { DirectoryStore } from '../store/directory-store';
 import { SearchStore } from '../store/search-store';
-
+import TagIcon from './../components/Icons/TagIcon.vue';
+import ArrowLeftIcon from './../components/Icons/ArrowLeftIcon.vue';
 @Component({
   name: 'NavBarSub-tags',
   components: {
     NavBarSubTagsItem,
     SearchBarFilter,
-    NavBarSubDirectoryItem
+    NavBarSubDirectoryItem,
+    TagIcon,
+    ArrowLeftIcon
   }
 })
 export default class NavBarSubTags extends Vue {
@@ -150,6 +156,10 @@ export default class NavBarSubTags extends Vue {
     }
   }
 
+  navigateBack() {
+    this.$router.go(-1);
+  }
+
   // Load all related tags for the selected one to suggest other tags to user
   getRelatedTags(tag: Tag) {
     let relatedTags: string[] = [];
@@ -199,6 +209,31 @@ export default class NavBarSubTags extends Vue {
 .nav-tags {
   height: 100%;
   overflow-y: scroll;
+}
+
+.selected-header {
+  background: $primary-color;
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: left;
+  z-index: 9998 !important;
+  padding: 10px 0;
+  margin-bottom: 10px;
+  .icon {
+    margin: auto 10px;
+  }
+  .back-icon {
+    cursor: pointer;
+  }
+
+  span {
+    margin: auto 10px;
+  }
+}
+
+svg {
+  width: 20px;
 }
 
 // Custom scrollbar

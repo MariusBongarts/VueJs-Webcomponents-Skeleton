@@ -18,6 +18,16 @@
         >
       </h5>
     </div>
+    <div class="chips-footer">
+      <NavBarSubDirectoryItem
+        v-for="directory in directories"
+        :key="directory._id"
+        :directory="directory"
+      >
+      </NavBarSubDirectoryItem>
+      <NavBarSubTagsItem v-for="tag in filterTags()" :key="tag._id" :tag="tag">
+      </NavBarSubTagsItem>
+    </div>
   </div>
 </template>
 
@@ -28,6 +38,8 @@ import { Mutation } from 'vuex-class';
 import { NavigationStore } from '../store/navigation-store';
 import { Route } from 'vue-router';
 import OverviewMarkElement from './../components/OverviewMarkElement.vue';
+import NavBarSubTagsItem from './../components/NavBarSubTagsItem.vue';
+import NavBarSubDirectoryItem from './../components/NavBarSubDirectoryItem.vue';
 import ArrowLeftIcon from './../components/Icons/ArrowLeftIcon.vue';
 import BlurIn from './../components/animations/BlurIn.vue';
 import SlideInFromRight from './../components/animations/SlideInFromRight.vue';
@@ -39,22 +51,64 @@ import { TagsStore } from '../store/tags-store';
 import { Tag } from '../models/tag';
 import { Bookmark } from '../models/bookmark';
 import { BookmarksStore } from '../store/bookmarks-store';
+import { Directory } from '../models/directory';
+import { DirectoryStore } from '../store/directory-store';
 
 @Component({
   components: {
     OverviewMarkElement,
     BlurIn,
     ArrowLeftIcon,
-    SlideInFromRight
+    SlideInFromRight,
+    NavBarSubTagsItem,
+    NavBarSubDirectoryItem
   }
 })
 export default class OverviewBookmark extends Vue {
-  @Prop() bookmark!: Bookmark;
-  @Prop() marks!: Mark[];
+  @Prop({ default: [] }) bookmark!: Bookmark;
+  @Prop({ default: [] }) marks!: Mark[];
+  tags: Tag[] = [];
+  directories: Directory[] = [];
   @Mutation initMarks!: () => void;
+
+  mounted() {
+    this.loadData();
+    this.listenForState();
+  }
+
+  listenForState() {
+    this.$store.subscribe(state => {
+      this.loadData();
+    });
+  }
+
+  filterTags() {
+    if (this.tags) {
+      return this.tags.filter(tag => !this.directories.some(directory => directory.name === tag.name));
+    }
+  }
+
+  loadData() {
+    this.loadTagsForBookmark();
+    this.loadDirectoriesForBookmark();
+  }
 
   getTimestamp(createdAt: number) {
     return timeSinceTimestamp(createdAt);
+  }
+
+  loadDirectoriesForBookmark() {
+    this.directories = DirectoryStore.state.directories.filter(directory =>
+      this.tags.some(tag => tag._directory && tag._directory === directory._id)
+    );
+  }
+
+  loadTagsForBookmark() {
+    this.tags = TagsStore.state.tags.filter(
+      tag =>
+        this.bookmark.tags.includes(tag.name) ||
+        this.marks.some(mark => mark.tags.includes(tag.name))
+    );
   }
 }
 </script>
@@ -109,6 +163,28 @@ a {
 .mark-element {
   background-color: white;
   margin-top: 15px;
+}
+
+.chips-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tag-item,
+.directory-item {
+  background: $primary-color;
+  border-radius: 25px;
+  font-size: 0.8em;
+
+  svg {
+    height: 100%;
+  }
+}
+
+.tag-item:hover,
+.directory-item:hover {
+  background: darken($primary-color, 5);
 }
 
 @media (min-width: 720px) {

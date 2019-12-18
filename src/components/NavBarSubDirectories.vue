@@ -3,6 +3,11 @@
     <div>
       <SearchBarFilter v-if="!limit" @input="e => applyFilter(e)" />
     </div>
+    <div class="selected-header" v-if="selectedDirectory">
+      <ArrowLeftIcon @click="navigateBack()" class="icon back-icon" />
+      <span>{{ selectedDirectory.name }} </span>
+      <FolderIcon class="icon" />
+    </div>
     <div class="nav-directories">
       <NavBarSubDirectoryItem
         v-for="(directoryBadge, index) in directoriesBadges"
@@ -30,18 +35,22 @@ import { Directory } from '../models/directory';
 import { DirectoryStore } from '../store/directory-store';
 import NavBarSubDirectoryItem from './../components/NavBarSubDirectoryItem.vue';
 import NavBarSubTagsItem from './../components/NavBarSubTagsItem.vue';
+import ArrowLeftIcon from './../components/Icons/ArrowLeftIcon.vue';
 import { MarksStore } from '../store/marks-store';
 import SearchBarFilter from './../components/SearchBarFilter.vue';
 import { BookmarksStore } from '../store/bookmarks-store';
 import { TagsStore } from '../store/tags-store';
 import { SearchStore } from '../store/search-store';
+import FolderIcon from './../components/Icons/FolderIcon.vue';
 
 @Component({
   name: 'NavBarSub-directories',
   components: {
     NavBarSubDirectoryItem,
     SearchBarFilter,
-    NavBarSubTagsItem
+    NavBarSubTagsItem,
+    ArrowLeftIcon,
+    FolderIcon
   }
 })
 export default class NavBarSubDirectories extends Vue {
@@ -64,6 +73,10 @@ export default class NavBarSubDirectories extends Vue {
   async onUrlChange() {
     this.getSelectedDirectory();
     this.loadDirectories();
+  }
+
+  navigateBack() {
+    this.$router.go(-1);
   }
 
   getSelectedDirectory() {
@@ -166,6 +179,31 @@ export default class NavBarSubDirectories extends Vue {
 .nav-directories {
   height: 100%;
   overflow-y: scroll;
+}
+
+.selected-header {
+  background: $primary-color;
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: left;
+  z-index: 9998 !important;
+  padding: 10px 0;
+  margin-bottom: 10px;
+  .icon {
+    margin: auto 10px;
+  }
+  .back-icon {
+    cursor: pointer;
+  }
+
+  span {
+    margin: auto 10px;
+  }
+}
+
+svg {
+  width: 20px;
 }
 
 // Custom scrollbar

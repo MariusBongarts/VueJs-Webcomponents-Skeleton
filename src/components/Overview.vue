@@ -109,8 +109,7 @@ export default class Overview extends Vue {
   }
 
   async navigateBack() {
-    const currentRoute = this.$route.name!.split('-')[0] || '';
-    await this.$router.push({ name: currentRoute });
+    await this.$router.go(-1);
   }
 
   scrollToTop() {

@@ -52,7 +52,7 @@ export default class NavBar extends Vue {
   mounted() {
     this.mobile = screen.width < 900;
     this.listenForResize();
-    this.listenForState();
+    // this.listenForState();
   }
 
   @Watch('$route')
@@ -67,13 +67,14 @@ export default class NavBar extends Vue {
       this.mobile = window.innerWidth < 900;
     });
   }
-  listenForState() {
-    this.$store.subscribe(state => {
-      if (this.$route.name !== 'search') {
-        this.showMobileNav = NavigationStore.state.showSubMenu;
-      }
-    });
-  }
+
+  // listenForState() {
+  //   this.$store.subscribe(state => {
+  //     if (this.$route.name !== 'search' && !this.$route.params.id) {
+  //       //this.showMobileNav = NavigationStore.state.showSubMenu;
+  //     }
+  //   });
+  // }
 
   toggleMobileNav() {
     this.showMobileNav = !this.showMobileNav;

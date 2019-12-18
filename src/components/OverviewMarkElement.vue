@@ -53,7 +53,6 @@ blockquote::before {
   position: absolute;
   left: 10px;
   top: -25px;
-  z-index: 9999 !important;
 }
 
 blockquote:nth-of-type(even) {
