@@ -77,7 +77,10 @@ export default class NavBarSubDirectories extends Vue {
 
   loadDirectories() {
     this.filterDirectories();
-    this.directoriesBadges = this.directories.map(directory => {
+    this.directoriesBadges = this.directories.filter(directory =>
+    !directory._parentDirectory ||
+    (this.selectedDirectory && this.selectedDirectory._id === directory._parentDirectory)
+    ).map(directory => {
       return {
         directory,
         badgeValue: this.getBadgeValue(directory)

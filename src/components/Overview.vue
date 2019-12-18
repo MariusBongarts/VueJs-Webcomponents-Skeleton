@@ -66,7 +66,7 @@ export default class Overview extends Vue {
   selectedBookmark!: Bookmark | undefined;
   selectedDirectory!: Directory | undefined;
 
-  pagination = 20;
+  pagination = 10;
 
   async mounted() {
     this.onUrlChange(this.$route);
@@ -81,7 +81,7 @@ export default class Overview extends Vue {
     const container = this.$refs.overview as HTMLElement;
     container.parentElement!.addEventListener('scroll', (e: Event) => {
       const target = e.target as HTMLElement;
-      if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+      if (target.scrollHeight - target.scrollTop < target.clientHeight * 2) {
         this.pagination = this.pagination + 20;
       }
     });

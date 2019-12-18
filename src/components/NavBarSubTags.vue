@@ -72,7 +72,7 @@ export default class NavBarSubTags extends Vue {
     const container = this.$refs.container as HTMLElement;
     container.addEventListener('scroll', (e: Event) => {
       const target = e.target as HTMLElement;
-      if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+      if (target.scrollHeight - target.scrollTop < target.clientHeight * 2) {
         this.pagination = this.pagination + 50;
       }
     });
