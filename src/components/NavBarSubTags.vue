@@ -25,7 +25,6 @@
         :key="index"
         :tag="tagBadge.tag"
         :badge="tagBadge.badgeValue"
-        :showBadge="!limit"
       />
     </div>
   </div>
