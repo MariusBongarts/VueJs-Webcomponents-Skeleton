@@ -17,6 +17,7 @@
     </SlideInFromTop>
 
     <OverviewBookmark
+      class="overview-bookmark"
       v-for="(bookmark, index) in getInfiniteScrollBookmarks()"
       :key="index"
       :bookmark="bookmark"
@@ -322,6 +323,10 @@ export default class Overview extends Vue {
     font-size: 1em;
     font-weight: bold;
   }
+}
+
+.overview-bookmark {
+  margin-top: 50px;
 }
 
 .url-marks {
