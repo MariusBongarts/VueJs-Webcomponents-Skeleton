@@ -3,7 +3,7 @@
     <div>
       <SearchBarFilter v-if="!limit" @input="e => applyFilter(e)" />
     </div>
-    <div class="selected-header" v-if="selectedOrigin">
+    <div class="selected-header" v-if="selectedOrigin && mobile">
       <ArrowLeftIcon @click="navigateBack()" class="icon back-icon" />
       <span>{{ selectedOrigin }} </span>
       <LinkIcon class="icon" />
@@ -54,6 +54,7 @@ export default class NavBarSubBookmarks extends Vue {
   originBadges: Array<{ origin: string; badgeValue: number }> = [];
   filter = '';
   selectedOrigin = '';
+  mobile = window.innerWidth < 900;
 
   mounted() {
     this.bookmarks = BookmarksStore.state.bookmarks;
@@ -61,6 +62,13 @@ export default class NavBarSubBookmarks extends Vue {
     this.getCurrentRouteInfo();
     this.loadData();
     this.listenForState();
+    this.listenForResize();
+  }
+
+  listenForResize() {
+    window.addEventListener('resize', () => {
+      this.mobile = window.innerWidth < 900;
+    });
   }
 
   navigateBack() {
@@ -193,7 +201,6 @@ export default class NavBarSubBookmarks extends Vue {
     margin: auto 10px;
   }
 }
-
 
 svg {
   width: 20px;

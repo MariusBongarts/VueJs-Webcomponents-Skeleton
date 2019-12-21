@@ -3,7 +3,7 @@
     <div>
       <SearchBarFilter v-if="!limit" @input="e => applyFilter(e)" />
     </div>
-    <div class="selected-header" v-if="selectedDirectory">
+    <div class="selected-header" v-if="selectedDirectory && mobile">
       <ArrowLeftIcon @click="navigateBack()" class="icon back-icon" />
       <span>{{ selectedDirectory.name }} </span>
       <FolderIcon class="icon" />
@@ -60,6 +60,7 @@ export default class NavBarSubDirectories extends Vue {
   directoriesBadges: Array<{ directory: Directory; badgeValue: number }> = [];
   filter = '';
   selectedDirectory: Directory | null = null;
+  mobile = window.innerWidth < 900;
 
   mounted() {
     this.directories = DirectoryStore.state.directories;
@@ -67,6 +68,13 @@ export default class NavBarSubDirectories extends Vue {
     this.getSelectedDirectory();
     this.loadDirectories();
     this.listenForState();
+    this.listenForResize();
+  }
+
+  listenForResize() {
+    window.addEventListener('resize', () => {
+      this.mobile = window.innerWidth < 900;
+    });
   }
 
   @Watch('$route')

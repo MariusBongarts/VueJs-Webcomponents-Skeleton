@@ -4,7 +4,7 @@
     <div v-if="!limit">
       <SearchBarFilter @input="e => applyFilter(e)" />
     </div>
-    <div class="selected-header" v-if="selectedTag">
+    <div class="selected-header" v-if="selectedTag && mobile">
       <ArrowLeftIcon @click="navigateBack()" class="icon back-icon" />
       <span>{{ selectedTag.name }} </span>
       <TagIcon class="icon" />
@@ -63,6 +63,7 @@ export default class NavBarSubTags extends Vue {
   filter = '';
   selectedTag: Tag | undefined | null = null;
   pagination = 50;
+  mobile = window.innerWidth < 900;
 
   mounted() {
     this.filter = SearchStore.state.filter;
@@ -70,6 +71,13 @@ export default class NavBarSubTags extends Vue {
     this.loadTags();
     this.listenForState();
     this.listenForScrolling();
+    this.listenForResize();
+  }
+
+  listenForResize() {
+    window.addEventListener('resize', () => {
+      this.mobile = window.innerWidth < 900;
+    });
   }
 
   getInfiniteScrollTags() {
