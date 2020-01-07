@@ -87,7 +87,7 @@ export default class OverviewBookmark extends Vue {
 
     // Filter tags with same name as directory
     if (this.directories.length) {
-      tags = tags.filter(tag => !this.directories.some(directory => directory.name === tag.name));
+      tags = tags.filter(tag => !this.directories.filter(directory => directory.name === tag.name).length);
     }
     return tags;
   }
