@@ -37,7 +37,7 @@ export class UserService {
   }
 
   async resendEmailConfirmationLink(email: string) {
-    await this.httpClient.post(`/users/resend-email-confirmation?email=${email}`, {});
+    await this.httpClient.get(`/users/resend-email-confirmation?email=${email}`);
   }
 
   async logout() {

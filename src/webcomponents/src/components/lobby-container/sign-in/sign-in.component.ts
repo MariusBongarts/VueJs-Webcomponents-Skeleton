@@ -92,7 +92,7 @@ class SignInComponent extends LitElement {
 						<!-- Option to resend email confirmation link -->
 						${this.errorMsg === 'Email is not confirmed yet!' ? html`
 						<div class="resend-email">
-							<button @click=${async () => await this.resendEmailConfirmation()}>Resend email confirmation link<button>
+							<button style="width: 80%" @click=${async () => await this.resendEmailConfirmation()}>Resend email confirmation link<button>
 							</div>
 						` : ''}
 
