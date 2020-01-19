@@ -15,10 +15,7 @@
         :directory="directoryBadge.directory"
         :badge="directoryBadge.badgeValue"
       />
-      <div
-        class="tags"
-        v-if="selectedDirectory && tags.length"
-      >
+      <div class="tags" v-if="selectedDirectory && tags.length">
         <NavBarSubTagsItem
           v-for="(tag, index) in tags"
           :key="index"
@@ -43,6 +40,7 @@ import { TagsStore } from '../store/tags-store';
 import { SearchStore } from '../store/search-store';
 import FolderIcon from './../components/Icons/FolderIcon.vue';
 import { Tag } from '../models/tag';
+import { Bookmark } from '../models/bookmark';
 
 @Component({
   name: 'NavBarSub-directories',
@@ -65,7 +63,7 @@ export default class NavBarSubDirectories extends Vue {
   tags: Tag[] = [];
 
   mounted() {
-    this.directories = DirectoryStore.state.directories;
+
     this.filter = SearchStore.state.filter;
     this.getSelectedDirectory();
     this.loadDirectories();
@@ -84,7 +82,6 @@ export default class NavBarSubDirectories extends Vue {
   async onUrlChange() {
     this.getSelectedDirectory();
     this.loadDirectories();
-    this.loadTagsForDirectory();
   }
 
   navigateBack() {
@@ -94,8 +91,11 @@ export default class NavBarSubDirectories extends Vue {
   getSelectedDirectory() {
     this.selectedDirectory = null;
     if (
-      this.$route && this.$route.name &&
-      this.$route.name!.startsWith('directories') && this.$route.params.id) {
+      this.$route &&
+      this.$route.name &&
+      this.$route.name!.startsWith('directories') &&
+      this.$route.params.id
+    ) {
       this.selectedDirectory =
         DirectoryStore.state.directories.find(
           directory => directory._id === this.$route.params.id
@@ -109,9 +109,12 @@ export default class NavBarSubDirectories extends Vue {
       if (SearchStore.state.filter) {
         this.filter = SearchStore.state.filter;
       }
-      this.directories = DirectoryStore.state.directories;
       this.getSelectedDirectory();
-      this.loadTagsForDirectory();
+
+      if (DirectoryStore.state.directories.length) {
+        this.directories = DirectoryStore.state.directories;
+        this.loadDirectories();
+      }
     });
   }
 
@@ -133,6 +136,9 @@ export default class NavBarSubDirectories extends Vue {
     this.directoriesBadges = this.directoriesBadges.sort(
       (a, b) => b.badgeValue - a.badgeValue
     );
+
+    this.loadTagsForDirectory();
+
     // Slice array if limit is set
     if (this.limit) {
       this.directoriesBadges = this.directoriesBadges.slice(0, this.limit);
@@ -160,17 +166,54 @@ export default class NavBarSubDirectories extends Vue {
 
   loadTagsForDirectory(directory?: Directory) {
     if (!directory) directory = this.selectedDirectory!;
+
     if (directory) {
+      const bookmarks = this.getBookmarksForDirectory(directory);
       const tags = TagsStore.state.tags.filter(
         tag =>
-          tag._directory === directory!._id &&
-          tag.name !== directory!.name &&
-          tag.name.toLowerCase().includes(this.filter.toLowerCase())
+          (tag._directory === directory!._id &&
+            tag.name !== directory!.name &&
+            tag.name.toLowerCase().includes(this.filter.toLowerCase())) ||
+          bookmarks.filter(bookmark => bookmark.tags.includes(tag.name)).length
       );
       this.tags = tags;
     } else {
       return [];
     }
+  }
+
+  getBookmarksForDirectory(directory: Directory) {
+    const bookmarks = BookmarksStore.state.bookmarks;
+    let tmp: Bookmark[] = [];
+    const tags = TagsStore.state.tags.filter(
+      tag => tag._directory && tag._directory === this.selectedDirectory!._id
+    );
+
+    for (const tag of tags) {
+      tmp = [
+        ...bookmarks.filter(
+          bookmark =>
+            (bookmark.tags &&
+              bookmark.tags.length &&
+              bookmark.tags.includes(tag.name)) ||
+            this.getMarksForBookmark(bookmark).some(mark =>
+              mark.tags.includes(tag.name)
+            )
+        ),
+        ...tmp
+      ];
+    }
+    return tmp;
+  }
+
+  getMarksForBookmark(bookmark: Bookmark) {
+    const marks = MarksStore.state.marks.filter(
+      mark =>
+        mark.url === bookmark.url &&
+        mark.text &&
+        mark.text.toLowerCase().includes(this.filter.toLowerCase())
+    );
+    return marks;
   }
 
   getBadgeValue(directory: Directory) {
