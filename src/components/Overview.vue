@@ -86,7 +86,7 @@ export default class Overview extends Vue {
   pagination = 10;
 
   async mounted() {
-    this.onUrlChange(this.$route);
+    this.loadUrlInformation(this.$route);
     this.loadBookmarks();
     this.listenForState();
     this.listenForScrolling();
@@ -129,7 +129,12 @@ export default class Overview extends Vue {
     this.selectedBookmark = undefined;
     this.selectedDirectory = undefined;
     this.searchActive = false;
+    this.loadUrlInformation(route);
 
+    await this.loadBookmarks();
+  }
+
+  loadUrlInformation(route: Route) {
     if (route.name!.startsWith('tags') && this.$route.params.id) {
       this.selectedTag = TagsStore.state.tags.find(
         tag => tag._id === this.selectedId
@@ -155,8 +160,10 @@ export default class Overview extends Vue {
     if (route.name!.startsWith('search')) {
       this.searchActive = true;
     }
-
-    await this.loadBookmarks();
+    if (this.selectedDirectory || this.selectedTag) {
+      this.loadBookmarks();
+      this.$forceUpdate();
+    }
   }
 
   getMarksForBookmark(bookmark: Bookmark) {
@@ -164,7 +171,8 @@ export default class Overview extends Vue {
       mark =>
         mark.url === bookmark.url &&
         (!this.selectedTag || mark.tags.includes(this.selectedTag.name)) &&
-        mark.text && mark.text.toLowerCase().includes(this.filter.toLowerCase())
+        mark.text &&
+        mark.text.toLowerCase().includes(this.filter.toLowerCase())
     );
     return marks;
   }
@@ -204,6 +212,7 @@ export default class Overview extends Vue {
 
   listenForState() {
     this.$store.subscribe(state => {
+      this.loadUrlInformation(this.$route);
       this.filter = SearchStore.state.filter;
       if (
         BookmarksStore.state.bookmarks.length !== this.bookmarks.length ||
@@ -277,6 +286,7 @@ export default class Overview extends Vue {
       }
       bookmarks = tmp;
     }
+
     if (this.filter) {
       bookmarks = BookmarksStore.state.bookmarks.filter(
         bookmark =>

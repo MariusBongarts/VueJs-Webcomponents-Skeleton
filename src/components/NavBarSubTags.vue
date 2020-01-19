@@ -157,7 +157,8 @@ export default class NavBarSubTags extends Vue {
   filterTags() {
     if (this.selectedTag) {
       this.tags = this.getRelatedTags(this.selectedTag);
-    } else {
+    }
+    if (this.filter) {
       this.tags = this.tags.filter(tag =>
         tag.name.toLowerCase().includes(this.filter.toLowerCase())
       );

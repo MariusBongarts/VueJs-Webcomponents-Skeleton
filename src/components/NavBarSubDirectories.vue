@@ -17,10 +17,10 @@
       />
       <div
         class="tags"
-        v-if="selectedDirectory && getTagsForDirectory().length"
+        v-if="selectedDirectory && tags.length"
       >
         <NavBarSubTagsItem
-          v-for="(tag, index) in getTagsForDirectory()"
+          v-for="(tag, index) in tags"
           :key="index"
           :tag="tag"
         />
@@ -42,6 +42,7 @@ import { BookmarksStore } from '../store/bookmarks-store';
 import { TagsStore } from '../store/tags-store';
 import { SearchStore } from '../store/search-store';
 import FolderIcon from './../components/Icons/FolderIcon.vue';
+import { Tag } from '../models/tag';
 
 @Component({
   name: 'NavBarSub-directories',
@@ -61,12 +62,14 @@ export default class NavBarSubDirectories extends Vue {
   filter = '';
   selectedDirectory: Directory | null = null;
   mobile = window.innerWidth < 900;
+  tags: Tag[] = [];
 
   mounted() {
     this.directories = DirectoryStore.state.directories;
     this.filter = SearchStore.state.filter;
     this.getSelectedDirectory();
     this.loadDirectories();
+    this.loadTagsForDirectory();
     this.listenForState();
     this.listenForResize();
   }
@@ -81,6 +84,7 @@ export default class NavBarSubDirectories extends Vue {
   async onUrlChange() {
     this.getSelectedDirectory();
     this.loadDirectories();
+    this.loadTagsForDirectory();
   }
 
   navigateBack() {
@@ -94,6 +98,7 @@ export default class NavBarSubDirectories extends Vue {
         DirectoryStore.state.directories.find(
           directory => directory._id === this.$route.params.id
         ) || null;
+      this.$forceUpdate();
     }
   }
 
@@ -102,7 +107,9 @@ export default class NavBarSubDirectories extends Vue {
       if (SearchStore.state.filter) {
         this.filter = SearchStore.state.filter;
       }
-      this.loadDirectories();
+      this.directories = DirectoryStore.state.directories;
+      this.getSelectedDirectory();
+      this.loadTagsForDirectory();
     });
   }
 
@@ -134,14 +141,14 @@ export default class NavBarSubDirectories extends Vue {
     if (this.selectedDirectory) {
       this.directories = this.getSubDirectories(this.selectedDirectory);
     } else {
-      this.directories = DirectoryStore.state.directories.filter(directory =>
+      this.directories = this.directories.filter(directory =>
         directory.name.toLowerCase().includes(this.filter.toLowerCase())
       );
     }
   }
 
   getSubDirectories(directory: Directory) {
-    return DirectoryStore.state.directories.filter(
+    return this.directories.filter(
       directoryTmp =>
         directoryTmp._parentDirectory &&
         directoryTmp._parentDirectory === directory._id &&
@@ -149,15 +156,16 @@ export default class NavBarSubDirectories extends Vue {
     );
   }
 
-  getTagsForDirectory(directory?: Directory) {
+  loadTagsForDirectory(directory?: Directory) {
     if (!directory) directory = this.selectedDirectory!;
     if (directory) {
-      return TagsStore.state.tags.filter(
+      const tags = TagsStore.state.tags.filter(
         tag =>
           tag._directory === directory!._id &&
           tag.name !== directory!.name &&
           tag.name.toLowerCase().includes(this.filter.toLowerCase())
       );
+      this.tags = tags;
     } else {
       return [];
     }

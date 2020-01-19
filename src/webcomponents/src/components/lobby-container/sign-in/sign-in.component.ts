@@ -101,7 +101,6 @@ class SignInComponent extends LitElement {
 						?disabled=${!this.formIsValid}
 						type="submit" id="login-button" @click=${(e: MouseEvent) => this.submit(e)}
 						class="${this.loading ? 'loading' :
-
 				''}"
 				>${this.loading ? '...' : 'Sign In'}</button>
 				</form>

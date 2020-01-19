@@ -82,12 +82,21 @@ export default class OverviewBookmark extends Vue {
     });
   }
 
+  @Watch('$route')
+  async onUrlChange() {
+    this.loadData();
+  }
+
   filterTags() {
     let tags = this.tags.filter(tag => this.bookmark.tags.includes(tag.name));
 
     // Filter tags with same name as directory
     if (this.directories.length) {
-      tags = tags.filter(tag => !this.directories.filter(directory => directory.name === tag.name).length);
+      tags = tags.filter(
+        tag =>
+          !this.directories.filter(directory => directory.name === tag.name)
+            .length
+      );
     }
     return tags;
   }
@@ -110,8 +119,9 @@ export default class OverviewBookmark extends Vue {
   loadTagsForBookmark() {
     this.tags = TagsStore.state.tags.filter(
       tag =>
-        this.bookmark.tags.includes(tag.name) ||
-        this.marks.some(mark => mark.tags.includes(tag.name))
+        this.bookmark.tags.filter(bookmarkTag => bookmarkTag === tag.name)
+          .length ||
+        this.marks.filter(mark => mark.tags.includes(tag.name)).length
     );
   }
 }
