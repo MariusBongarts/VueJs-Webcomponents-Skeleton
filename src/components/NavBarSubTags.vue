@@ -112,7 +112,9 @@ export default class NavBarSubTags extends Vue {
 
   getSelectedTag() {
     this.selectedTag = undefined;
-    if (this.$route.name!.startsWith('tags') && this.$route.params.id) {
+    if (
+      this.$route && this.$route.name &&
+      this.$route.name!.startsWith('tags') && this.$route.params.id) {
       this.selectedTag = TagsStore.state.tags.find(
         tag => tag._id === this.$route.params.id
       );

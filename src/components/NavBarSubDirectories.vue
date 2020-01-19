@@ -93,7 +93,9 @@ export default class NavBarSubDirectories extends Vue {
 
   getSelectedDirectory() {
     this.selectedDirectory = null;
-    if (this.$route.name!.startsWith('directories') && this.$route.params.id) {
+    if (
+      this.$route && this.$route.name &&
+      this.$route.name!.startsWith('directories') && this.$route.params.id) {
       this.selectedDirectory =
         DirectoryStore.state.directories.find(
           directory => directory._id === this.$route.params.id

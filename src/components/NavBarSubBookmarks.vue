@@ -84,6 +84,7 @@ export default class NavBarSubBookmarks extends Vue {
   getCurrentRouteInfo() {
     this.selectedOrigin = '';
     if (
+      this.$route && this.$route.name &&
       this.$route.name!.startsWith('bookmarks-origin') &&
       this.$route.params.origin
     ) {

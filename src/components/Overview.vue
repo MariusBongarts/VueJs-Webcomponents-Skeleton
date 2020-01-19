@@ -135,34 +135,36 @@ export default class Overview extends Vue {
   }
 
   loadUrlInformation(route: Route) {
-    if (route.name!.startsWith('tags') && this.$route.params.id) {
-      this.selectedTag = TagsStore.state.tags.find(
-        tag => tag._id === this.selectedId
-      );
-    }
+    if (route && route.name) {
+      if (route.name!.startsWith('tags') && this.$route.params.id) {
+        this.selectedTag = TagsStore.state.tags.find(
+          tag => tag._id === this.selectedId
+        );
+      }
 
-    if (route.name!.startsWith('directories') && this.$route.params.id) {
-      this.selectedDirectory = DirectoryStore.state.directories.find(
-        directory => directory._id === this.$route.params.id
-      );
-    }
+      if (route.name!.startsWith('directories') && this.$route.params.id) {
+        this.selectedDirectory = DirectoryStore.state.directories.find(
+          directory => directory._id === this.$route.params.id
+        );
+      }
 
-    if (route.name!.startsWith('bookmarks') && this.$route.params.origin) {
-      this.selectedOrigin = this.$route.params.origin;
-    }
+      if (route.name!.startsWith('bookmarks') && this.$route.params.origin) {
+        this.selectedOrigin = this.$route.params.origin;
+      }
 
-    if (route.name!.startsWith('bookmarks') && this.$route.params.id) {
-      this.selectedBookmark = BookmarksStore.state.bookmarks.find(
-        bookmark => bookmark._id === this.$route.params.id
-      );
-    }
+      if (route.name!.startsWith('bookmarks') && this.$route.params.id) {
+        this.selectedBookmark = BookmarksStore.state.bookmarks.find(
+          bookmark => bookmark._id === this.$route.params.id
+        );
+      }
 
-    if (route.name!.startsWith('search')) {
-      this.searchActive = true;
-    }
-    if (this.selectedDirectory || this.selectedTag) {
-      this.loadBookmarks();
-      this.$forceUpdate();
+      if (route.name!.startsWith('search')) {
+        this.searchActive = true;
+      }
+      if (this.selectedDirectory || this.selectedTag) {
+        this.loadBookmarks();
+        this.$forceUpdate();
+      }
     }
   }
 
