@@ -109,7 +109,7 @@ class SignInComponent extends LitElement {
 								@change=${() => this.isFormValid()}
 								required
 								type="checkbox" id="privacy-checkbox" name="privacy-checkbox">
-								<label for="privacy-checkbox">I hereby confirm that I have read and agree with the <a target="_blank" href="https://marius2502.github.io/datenschutzerklaerung/">privacy policy</a>.</label>
+								<label for="privacy-checkbox">I hereby confirm that I have read and agree with the <a target="_blank" href="https://MariusBongarts.github.io/datenschutzerklaerung/">privacy policy</a>.</label>
 
 							</div>
 						</div>
